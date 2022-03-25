@@ -1,6 +1,3 @@
-export class Test {
-    name: string;
-    constructor(s:string) {
-        this.name = s;
-    }
-};
+export * from './Connection'
+export * from './Contracts'
+export * from './Transactions'

@@ -1,9 +1,7 @@
 import assert from "assert";
-import Medium from "../Medium";
+import Asset from "./Asset";
 
-export default class Stock extends Medium {
-    ticker: string;
-    amount: number;
+export default class Stock extends Asset {
     /**
      * 
      * @param t The ticker of the stock. The ticker must include the '$'
@@ -13,8 +11,6 @@ export default class Stock extends Medium {
         assert(t.charAt(0) == '$', 'Your ticker requires a ticker symbol ($)'); // Check to make sure t is a proper ticker
         assert(a > 0, 'The amount of shares must be a positive value'); // Check to make sure a is a positive number
         assert(a % 1 === 0, 'The amount of shares must be a whole number value'); // Check to make sure a is a whole number
-        super('Stock');
-        this.ticker = t;
-        this.amount = a;
+        super(t, a, 'Stock');
     }
 }

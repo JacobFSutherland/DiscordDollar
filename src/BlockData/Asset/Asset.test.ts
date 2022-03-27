@@ -1,4 +1,6 @@
 import Medium from '../Medium';
+import Asset from './Asset';
+import Stock from './Stock';
 import Token from './Token';
 
 jest.mock("../Medium");
@@ -8,8 +10,8 @@ describe('Test Token Constructor', () => {
     /**
      * Make sure all methods are being called, and token is being created as intended
      */
-    test('Test 1: Create Regular Token', () => {
-        let t = new Token("a", 10);
+    test('Test 1: Create Regular Asset', () => {
+        let t = new Asset("a", 10, 'Asset');
         expect(t.amount).toEqual(10);
         expect(t.name).toEqual("a");
         expect(Medium).toBeCalledTimes(1);
@@ -19,17 +21,17 @@ describe('Test Token Constructor', () => {
     * Make sure token is being rejected if it has a negative value
     */
 
-    test('Test 2: Create Invalid Token', () => {
+    test('Test 2: Create Invalid Asset', () => {
         expect(
-            () => new Token('b', -10)
-        ).toThrow('The token amount must be a positive value')
+            () => new Asset('b', -10, 'Asset')
+        ).toThrow('The Asset amount must be a positive value')
     })
 
 })
 
-describe('Test Token Functions', () => {
-    let t1: Token;
-    let t2: Token;
+describe('Test Asset Functions', () => {
+    let t1: Asset;
+    let t2: Asset;
 
     /**
     * Make 2 tokens are being added together
@@ -54,15 +56,15 @@ describe('Test Token Functions', () => {
     })
 
     /**
-    * Make sure invalid tokens being added throws an error
+    * Make sure invalid asset operations throws an error
     */
 
-    test('Test 2: Add 2 invalid tokens together', () => {
+    test('Test 2: Add 2 different assets together', () => {
         t1 = new Token("a", 10);
-        t2 = new Token("b", 100);
+        t2 = new Stock("$b", 100);
 
         // Test initial add function
-        expect(() => t1.add(t2)).toThrow('The tokens must be the same token when performing an adition');
+        expect(() => t1.add(t2)).toThrow('The assets must be the same asset when performing an adition');
 
         // Test Post Conditions
         expect(t1.amount).toEqual(10);
@@ -91,11 +93,11 @@ describe('Test Token Functions', () => {
         expect(t2.amount).toEqual(0);
     })
 
-    test('Test 4: Subtract 2 tokens together with the resultant to be negative', () => {
-        t1 = new Token("a", 10);
-        t2 = new Token("a", 10.01);
+    test('Test 4: Subtract 2 assets together with the resultant to be negative', () => {
+        t1 = new Asset("a", 10, 'Asset');
+        t2 = new Asset("a", 10.01, 'Asset');
 
-        expect(() => t1.remove(t2)).toThrow("Cannot subtract, not enough tokens to subtract");
+        expect(() => t1.remove(t2)).toThrow("Cannot subtract, not enough assets to subtract");
 
         // Test Post Conditions
         expect(t1.amount).toEqual(10);
@@ -103,10 +105,10 @@ describe('Test Token Functions', () => {
     })
 
     test('Test 5: Subtract 2 tokens together with different names', () => {
-        t1 = new Token("a", 10);
-        t2 = new Token("b", 100);
+        t1 = new Asset("a", 10, 'Asset');
+        t2 = new Asset("b", 100, 'Asset');
 
-        expect(() => t2.remove(t1)).toThrow("The tokens must be the same token when performing a subtraction");
+        expect(() => t2.remove(t1)).toThrow("The assets must be the same asset when performing a subtraction");
 
         // Test Post Conditions
         expect(t1.amount).toEqual(10);

@@ -1,15 +1,14 @@
-import Stock from "./Goods/Stock";
-import Token from "./Goods/Token";
-import Option from "./Goods/Option";
+import Stock from "./Asset/Stock";
+import Token from "./Asset/Token";
+import Option from "./Asset/Option";
 import TSMap from "./TSMap";
 import assert from "assert";
+import Asset from "./Asset/Asset";
 
 export default class EconomyParticipant{
     static addedIDs: string[] = [];
     discordID: string;
-    tokens: TSMap<Token>;
-    stocks: TSMap<Stock>;
-    options: TSMap<Option>;
+    assets: TSMap<Asset>;
 
     /**
      * 
@@ -19,31 +18,28 @@ export default class EconomyParticipant{
         assert(!EconomyParticipant.addedIDs.includes(id), 'Duplicate Economy Participant');
         EconomyParticipant.addedIDs.push(id);
         this.discordID = id; 
-        this.tokens = {};
-        this.stocks = {};
-        this.options = {};
+        this.assets = {};
     }
 
     /**
      * 
-     * @param token The token being added to the Discord user. 
+     * @param asset The asset being added to the Discord user. 
      */
-    addToken(token: Token){
-        if(this.tokens[token.name]){ 
-            this.tokens[token.name].add(token); // if the token exists within the user's known token balances, the sums are totaled and updated accordingly.
+    addAsset(asset: Asset){
+        if(this.assets[asset.name]){ 
+            this.assets[asset.name].add(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
         }else{
-            this.tokens[token.name] = new Token(token.name, token.amount); // if the token does not exist within the user's known token balances, the token is cloned and set.
+            this.assets[asset.name] = new Token(asset.name, asset.amount); // if the asset does not exist within the user's known token balances, the asset is cloned and set.
         }//if
     } //addToken
 
     /**
      * 
-     * @param token The token being subtracted from the Discord user. 
+     * @param asset The asset being subtracted from the Discord user. 
      */
-    removeToken(token: Token){
-        assert(this.tokens[token.name], `Token not found in user ${this.discordID}`);
-        this.tokens[token.name].remove(token); // if the token exists within the user's known token balances, the sums are totaled and updated accordingly.
+    removeAsset(asset: Asset){
+        assert(this.assets[asset.name], `Asset not found in user ${this.discordID}`);
+        this.assets[asset.name].remove(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
     }
-
 
 }

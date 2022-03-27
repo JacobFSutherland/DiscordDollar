@@ -1,5 +1,7 @@
 import EconomyParticipant from "./EconomyParticipant";
-import Token from "./Goods/Token";
+import Token from "./Asset/Token";
+import Asset from "./Asset/Asset";
+import Stock from "./Asset/Stock";
 
 describe('Test Economy Participant Static Values', () => {
 
@@ -23,7 +25,7 @@ describe('Test Economy Participant Static Values', () => {
 
 })
 
-describe('Adding, and Removing Tokens', () => {
+describe('Adding, and Removing assets', () => {
 
     beforeEach(() => {
         EconomyParticipant.addedIDs = []
@@ -32,8 +34,8 @@ describe('Adding, and Removing Tokens', () => {
     test('Test 1: Add a token a user does not already have', () => {
         let token = new Token('test token', 10);
         let participant = new EconomyParticipant("abc");
-        participant.addToken(token);
-        expect(participant.tokens[token.name].amount).toEqual(token.amount)
+        participant.addAsset(token);
+        expect(participant.assets[token.name].amount).toEqual(token.amount)
     })
 
 
@@ -44,39 +46,39 @@ describe('Adding, and Removing Tokens', () => {
 
         let participant = new EconomyParticipant("abc");
 
-        participant.addToken(tokenA);
+        participant.addAsset(tokenA);
 
-        let tokenSpy = jest.spyOn(participant.tokens[tokenA.name], 'add');
+        let tokenSpy = jest.spyOn(participant.assets[tokenA.name], 'add');
 
-        participant.addToken(tokenB);
+        participant.addAsset(tokenB);
         expect(tokenSpy).toBeCalledTimes(1)
-        expect(participant.tokens['test token'].amount).toEqual(30)
+        expect(participant.assets['test token'].amount).toEqual(30)
     })
 
-    test('Remove a token that a user has', () => {
-        let token = new Token('test token', 10);
+    test('Add an asset that a user does not have', () => {
+        let token = new Asset('test token', 10, 'Token');
         let participant = new EconomyParticipant("abc");
-        participant.addToken(token);
-        expect(participant.tokens).toEqual({'test token': token})
+        participant.addAsset(token);
+        expect(participant.assets).toEqual({'test token': token})
     })
 
     test('Remove a token that a user does not have', () => {
         let token = new Token('test token', 10);
         let participant = new EconomyParticipant("abc");
-        participant.addToken(token);
-        expect(participant.tokens).toEqual({'test token': token})
+        participant.addAsset(token);
+        expect(participant.assets).toEqual({'test token': token})
         expect(() => {
-            participant.removeToken(new Token('invalid', 10));
+            participant.removeAsset(new Token('invalid', 10));
         }).toThrow()
     })
 
-    test('Remove a token that a user has', () => {
-        let tokenA = new Token('test token', 100);
-        let tokenB = new Token('test token', 100);
+    test('Remove a stock that a user has', () => {
+        let stockA = new Stock('$bb', 100);
+        let stockB = new Token('$bb', 100);
         let participant = new EconomyParticipant("abc");
-        participant.addToken(tokenA);
-        participant.removeToken(tokenB);
-        expect(participant.tokens[tokenA.name].amount).toEqual(0);
+        participant.addAsset(stockA);
+        participant.removeAsset(stockB);
+        expect(participant.assets[stockA.name].amount).toEqual(0);
     })
 
 }) 

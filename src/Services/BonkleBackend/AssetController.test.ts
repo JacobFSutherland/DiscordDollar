@@ -1,6 +1,7 @@
 import AssetController from "./AssetController";
 import EconomyParticipant from "../../BlockData/EconomyParticipant";
-import FungibleAsset from "../../BlockData/Fungible/FungibleAsset";
+import FungibleAsset from "../../BlockData/FungibleAssets/FungibleAsset";
+import NFT from "../../BlockData/NonFungibleAssets/NFT";
 
 jest.mock("../../BlockData/EconomyParticipant");
 
@@ -29,9 +30,9 @@ describe('Test Constructor', () => {
 
     test("Test 3: Make sure an economy participant is not created twice when adding assets", () => {
         let asset = new FungibleAsset('test asset', 10, "Asset");
-        let asset2 = new FungibleAsset('test asset', 1, "Asset");
+        let asset2 = new NFT();
         a.addAsset("new user 3", asset);
-        a.remAsset("new user 3", asset2);
+        a.addAsset("new user 3", asset2);
         expect(EconomyParticipant).toBeCalledTimes(1);
     })
 

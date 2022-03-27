@@ -1,4 +1,4 @@
-import FungibleAsset from "./Fungible/FungibleAsset";
+import FungibleAsset from "./FungibleAssets/FungibleAsset";
 import NonFungibleAsset from "./NonFungibleAssets/NonFungibleAsset";
 import Service from "./Services/Service";
 

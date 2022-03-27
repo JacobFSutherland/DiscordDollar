@@ -13,7 +13,7 @@ export default class FungibleAsset extends Medium {
      */
     constructor(n: string, a: number, t: string){
         assert(a > 0, 'The Asset amount must be a positive value'); // Check to make sure a is a positive number
-        super(t);
+        super(t, 'FungibleAsset');
         this.name = n;
         this.amount = a;
     }

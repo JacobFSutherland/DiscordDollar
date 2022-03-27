@@ -1,11 +1,13 @@
 import TSMap from "./TSMap";
 import assert from "assert";
-import FungibleAsset from "./Fungible/FungibleAsset";
+import FungibleAsset from "./FungibleAssets/FungibleAsset";
+import NonFungibleAsset from "./NonFungibleAssets/NonFungibleAsset";
 
 export default class EconomyParticipant{
     static addedIDs: string[] = [];
     discordID: string;
     fungibleAssets: TSMap<FungibleAsset>;
+    nonFungibleAssets: TSMap<NonFungibleAsset>;
 
     /**
      * @description Creates a new EconomyParticipant only if the ID passed is unique
@@ -16,27 +18,45 @@ export default class EconomyParticipant{
         EconomyParticipant.addedIDs.push(id);
         this.discordID = id; 
         this.fungibleAssets = {};
+        this.nonFungibleAssets = {};
     }
 
     /**
      * @description Assets of the same name are automatically added together
      * @param asset The asset being added to the Discord user. 
      */
-    addFungibleAsset(asset: FungibleAsset){
-        if(this.fungibleAssets[asset.name]){ 
-            this.fungibleAssets[asset.name].add(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
-        }else{
-            this.fungibleAssets[asset.name] = new FungibleAsset(asset.name, asset.amount, asset.type); // if the asset does not exist within the user's known token balances, the asset is cloned and set.
-        }//if
+    addNonFungibleAsset(asset: NonFungibleAsset){
+        this.nonFungibleAssets[asset.id] = asset; // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
     } //addToken
 
     /**
      * 
      * @param asset The asset being subtracted from the Discord user. 
      */
-    removeFungibleAsset(asset: FungibleAsset){
-        assert(this.fungibleAssets[asset.name], `Asset not found in user ${this.discordID}`);
-        this.fungibleAssets[asset.name].remove(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
+    removeNonFungibleAsset(asset: NonFungibleAsset){
+        assert(this.nonFungibleAssets[asset.id] != undefined, `Asset not found in user ${this.discordID}`);
+        delete this.nonFungibleAssets[asset.id];
     }
+
+        /**
+     * @description Assets of the same name are automatically added together
+     * @param asset The asset being added to the Discord user. 
+     */
+         addFungibleAsset(asset: FungibleAsset){
+            if(this.fungibleAssets[asset.name]){ 
+                this.fungibleAssets[asset.name].add(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
+            }else{
+                this.fungibleAssets[asset.name] = new FungibleAsset(asset.name, asset.amount, asset.type); // if the asset does not exist within the user's known token balances, the asset is cloned and set.
+            }//if
+        } //addToken
+    
+        /**
+         * 
+         * @param asset The asset being subtracted from the Discord user. 
+         */
+        removeFungibleAsset(asset: FungibleAsset){
+            assert(this.fungibleAssets[asset.name], `Asset not found in user ${this.discordID}`);
+            this.fungibleAssets[asset.name].remove(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
+        }
 
 }

@@ -1,7 +1,8 @@
 import EconomyParticipant from "./EconomyParticipant";
-import Token from "./Fungible/Token";
-import FungibleAsset from "./Fungible/FungibleAsset";
-import Stock from "./Fungible/Stock";
+import Token from "./FungibleAssets/Token";
+import FungibleAsset from "./FungibleAssets/FungibleAsset";
+import Stock from "./FungibleAssets/Stock";
+import NFT from "./NonFungibleAssets/NFT";
 
 describe('Test Economy Participant Static Values', () => {
 
@@ -25,7 +26,7 @@ describe('Test Economy Participant Static Values', () => {
 
 })
 
-describe('Adding, and Removing assets', () => {
+describe('Adding, and Removing Fungible Assets', () => {
 
     beforeEach(() => {
         EconomyParticipant.addedIDs = []
@@ -82,4 +83,29 @@ describe('Adding, and Removing assets', () => {
     })
 
 }) 
+
+describe("Adding and removing non-fungible assets", () => {
+
+    test('Test 1: Add an NFT to a user', () => {
+        let nft = new NFT();
+        let participant = new EconomyParticipant("user");
+        participant.addNonFungibleAsset(nft);
+        expect(participant.nonFungibleAssets[nft.id]).toEqual(nft)
+    })
+
+    test('Test 2: Add and remove NFT from a user', () => {
+        let nft = new NFT();
+        let participant = new EconomyParticipant("user5");
+        participant.addNonFungibleAsset(nft);
+        participant.removeNonFungibleAsset(nft);
+        expect(participant.nonFungibleAssets[nft.id]).toBeUndefined()
+    })
+
+    test('Test 2: Remove an NFT a user does not have', () => {
+        let nft = new NFT();
+        let participant = new EconomyParticipant("user2");
+        expect(() => participant.removeNonFungibleAsset(nft)).toThrowError()
+    })
+
+})
 

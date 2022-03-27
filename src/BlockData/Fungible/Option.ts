@@ -1,13 +1,13 @@
 import assert from "assert";
-import Asset from "./Asset";
+import FungibleAsset from "./FungibleAsset";
 
-export default class Option extends Asset {
+export default class Option extends FungibleAsset {
     ticker: string;
     strike: number;
     option: 'Calls' | 'Puts';
     expiration: number;
     /**
-     * 
+     * @description The constructor for the Options class
      * @param t The ticker of the stock. The ticker must include the '$'
      * @param a Number of Shares of stock being transfered. Must be a positive amount
      * @param o The type of option: 'Calls' or 'Puts'
@@ -24,11 +24,13 @@ export default class Option extends Asset {
         this.strike = s;
         this.expiration = -1;
     }
-        /**
-     * 
+    /**
+     * @description Static function used to get the name of the option asset given the parameters that make it unique
      * @param t The ticker of the option. The ticker must include the '$'
      * @param o The type of option: 'Calls' or 'Puts'
      * @param s The strike price of the option
+     * 
+     * @returns Theoredical asset name of the option
      */
     static getOptionName(t: string, o: 'Calls' | 'Puts', s: number): string{
         assert(t.charAt(0) == '$', 'Your ticker requires a ticker symbol ($)'); // Check to make sure t is a proper ticker

@@ -1,5 +1,5 @@
 import Medium from '../Medium';
-import Asset from './Asset';
+import FungibleAsset from './FungibleAsset';
 import Stock from './Stock';
 import Token from './Token';
 
@@ -11,7 +11,7 @@ describe('Test Token Constructor', () => {
      * Make sure all methods are being called, and token is being created as intended
      */
     test('Test 1: Create Regular Asset', () => {
-        let t = new Asset("a", 10, 'Asset');
+        let t = new FungibleAsset("a", 10, 'Asset');
         expect(t.amount).toEqual(10);
         expect(t.name).toEqual("a");
         expect(Medium).toBeCalledTimes(1);
@@ -23,15 +23,15 @@ describe('Test Token Constructor', () => {
 
     test('Test 2: Create Invalid Asset', () => {
         expect(
-            () => new Asset('b', -10, 'Asset')
+            () => new FungibleAsset('b', -10, 'Asset')
         ).toThrow('The Asset amount must be a positive value')
     })
 
 })
 
 describe('Test Asset Functions', () => {
-    let t1: Asset;
-    let t2: Asset;
+    let t1: FungibleAsset;
+    let t2: FungibleAsset;
 
     /**
     * Make 2 tokens are being added together
@@ -94,8 +94,8 @@ describe('Test Asset Functions', () => {
     })
 
     test('Test 4: Subtract 2 assets together with the resultant to be negative', () => {
-        t1 = new Asset("a", 10, 'Asset');
-        t2 = new Asset("a", 10.01, 'Asset');
+        t1 = new FungibleAsset("a", 10, 'Asset');
+        t2 = new FungibleAsset("a", 10.01, 'Asset');
 
         expect(() => t1.remove(t2)).toThrow("Cannot subtract, not enough assets to subtract");
 
@@ -105,8 +105,8 @@ describe('Test Asset Functions', () => {
     })
 
     test('Test 5: Subtract 2 tokens together with different names', () => {
-        t1 = new Asset("a", 10, 'Asset');
-        t2 = new Asset("b", 100, 'Asset');
+        t1 = new FungibleAsset("a", 10, 'Asset');
+        t2 = new FungibleAsset("b", 100, 'Asset');
 
         expect(() => t2.remove(t1)).toThrow("The assets must be the same asset when performing a subtraction");
 

@@ -4,7 +4,7 @@
   "description": "��T\u0000y\u0000p\u0000e\u0000s\u0000 \u0000u\u0000s\u0000e\u0000d\u0000 \u0000i\u0000n\u0000 \u0000t\u0000h\u0000e\u0000 \u0000B\u0000o\u0000n\u0000k\u0000l\u0000e\u0000 \u0000B\u0000u\u0000c\u0000k\u0000 \u0000e\u0000c\u0000o\u0000s\u0000y\u0000s\u0000t\u0000e\u0000m\u0000\r\u0000 \u0000",
   "main": "index.js",
   "scripts": {
-    "test": "jest --config jestconfig.json",
+    "test": "jest --config jestconfig.json --coverage",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "prepare": "npm run build",
@@ -36,6 +36,7 @@
     "eslint-plugin-import": "^2.25.4",
     "jest": "^27.5.1",
     "prettier": "^2.6.0",
+    "supertest": "^6.2.2",
     "ts-jest": "^27.1.4",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^4.6.3"

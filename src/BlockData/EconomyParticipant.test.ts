@@ -1,7 +1,7 @@
 import EconomyParticipant from "./EconomyParticipant";
-import Token from "./Asset/Token";
-import Asset from "./Asset/Asset";
-import Stock from "./Asset/Stock";
+import Token from "./Fungible/Token";
+import FungibleAsset from "./Fungible/FungibleAsset";
+import Stock from "./Fungible/Stock";
 
 describe('Test Economy Participant Static Values', () => {
 
@@ -34,8 +34,8 @@ describe('Adding, and Removing assets', () => {
     test('Test 1: Add a token a user does not already have', () => {
         let token = new Token('test token', 10);
         let participant = new EconomyParticipant("abc");
-        participant.addAsset(token);
-        expect(participant.assets[token.name].amount).toEqual(token.amount)
+        participant.addFungibleAsset(token);
+        expect(participant.fungibleAssets[token.name].amount).toEqual(token.amount)
     })
 
 
@@ -46,39 +46,39 @@ describe('Adding, and Removing assets', () => {
 
         let participant = new EconomyParticipant("abc");
 
-        participant.addAsset(tokenA);
+        participant.addFungibleAsset(tokenA);
 
-        let tokenSpy = jest.spyOn(participant.assets[tokenA.name], 'add');
+        let tokenSpy = jest.spyOn(participant.fungibleAssets[tokenA.name], 'add');
 
-        participant.addAsset(tokenB);
+        participant.addFungibleAsset(tokenB);
         expect(tokenSpy).toBeCalledTimes(1)
-        expect(participant.assets['test token'].amount).toEqual(30)
+        expect(participant.fungibleAssets['test token'].amount).toEqual(30)
     })
 
     test('Add an asset that a user does not have', () => {
-        let token = new Asset('test token', 10, 'Token');
+        let token = new FungibleAsset('test token', 10, 'Token');
         let participant = new EconomyParticipant("abc");
-        participant.addAsset(token);
-        expect(participant.assets).toEqual({'test token': token})
+        participant.addFungibleAsset(token);
+        expect(participant.fungibleAssets).toEqual({'test token': token})
     })
 
     test('Remove a token that a user does not have', () => {
         let token = new Token('test token', 10);
         let participant = new EconomyParticipant("abc");
-        participant.addAsset(token);
-        expect(participant.assets).toEqual({'test token': token})
+        participant.addFungibleAsset(token);
+        expect(participant.fungibleAssets).toEqual({'test token': token})
         expect(() => {
-            participant.removeAsset(new Token('invalid', 10));
+            participant.removeFungibleAsset(new Token('invalid', 10));
         }).toThrow()
     })
 
     test('Remove a stock that a user has', () => {
         let stockA = new Stock('$bb', 100);
-        let stockB = new Token('$bb', 100);
+        let stockB = new Stock('$bb', 100);
         let participant = new EconomyParticipant("abc");
-        participant.addAsset(stockA);
-        participant.removeAsset(stockB);
-        expect(participant.assets[stockA.name].amount).toEqual(0);
+        participant.addFungibleAsset(stockA);
+        participant.removeFungibleAsset(stockB);
+        expect(participant.fungibleAssets[stockA.name].amount).toEqual(0);
     })
 
 }) 

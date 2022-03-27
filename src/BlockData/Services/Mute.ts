@@ -1,6 +1,6 @@
-import Medium from "../Medium";
+import Service from "./Service";
 
-export default class Mute extends Medium{
+export default class Mute extends Service{
     duration: number;
 
     constructor(){

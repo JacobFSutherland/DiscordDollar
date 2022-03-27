@@ -1,35 +1,32 @@
-import Stock from "./Asset/Stock";
-import Token from "./Asset/Token";
-import Option from "./Asset/Option";
 import TSMap from "./TSMap";
 import assert from "assert";
-import Asset from "./Asset/Asset";
+import FungibleAsset from "./Fungible/FungibleAsset";
 
 export default class EconomyParticipant{
     static addedIDs: string[] = [];
     discordID: string;
-    assets: TSMap<Asset>;
+    fungibleAssets: TSMap<FungibleAsset>;
 
     /**
-     * 
+     * @description Creates a new EconomyParticipant only if the ID passed is unique
      * @param id The ID of the Discord user that is being initialized as an economy participant
      */
     constructor(id: string){
         assert(!EconomyParticipant.addedIDs.includes(id), 'Duplicate Economy Participant');
         EconomyParticipant.addedIDs.push(id);
         this.discordID = id; 
-        this.assets = {};
+        this.fungibleAssets = {};
     }
 
     /**
-     * 
+     * @description Assets of the same name are automatically added together
      * @param asset The asset being added to the Discord user. 
      */
-    addAsset(asset: Asset){
-        if(this.assets[asset.name]){ 
-            this.assets[asset.name].add(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
+    addFungibleAsset(asset: FungibleAsset){
+        if(this.fungibleAssets[asset.name]){ 
+            this.fungibleAssets[asset.name].add(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
         }else{
-            this.assets[asset.name] = new Token(asset.name, asset.amount); // if the asset does not exist within the user's known token balances, the asset is cloned and set.
+            this.fungibleAssets[asset.name] = new FungibleAsset(asset.name, asset.amount, asset.type); // if the asset does not exist within the user's known token balances, the asset is cloned and set.
         }//if
     } //addToken
 
@@ -37,9 +34,9 @@ export default class EconomyParticipant{
      * 
      * @param asset The asset being subtracted from the Discord user. 
      */
-    removeAsset(asset: Asset){
-        assert(this.assets[asset.name], `Asset not found in user ${this.discordID}`);
-        this.assets[asset.name].remove(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
+    removeFungibleAsset(asset: FungibleAsset){
+        assert(this.fungibleAssets[asset.name], `Asset not found in user ${this.discordID}`);
+        this.fungibleAssets[asset.name].remove(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
     }
 
 }

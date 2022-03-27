@@ -1,6 +1,6 @@
-import Medium from "../Medium";
+import Service from "./Service";
 
-export default class ChangeNickname extends Medium{
+export default class ChangeNickname extends Service{
     nickname: string;
     /**
      * 

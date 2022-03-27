@@ -1,6 +1,6 @@
-import Medium from "../Medium";
+import Service from "./Service";
 
-export default class Sound extends Medium{
+export default class Sound extends Service{
     soundName: string;
     /**
      * 

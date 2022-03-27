@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1648348585688" clover="3.2.0">
+  <project timestamp="1648348585688" name="All files">
+    <metrics statements="31" coveredstatements="31" conditionals="2" coveredconditionals="2" methods="7" coveredmethods="7" elements="40" coveredelements="40" complexity="0" loc="31" ncloc="31" packages="2" files="3" classes="3"/>
+    <package name="BlockData">
+      <metrics statements="17" coveredstatements="17" conditionals="2" coveredconditionals="2" methods="4" coveredmethods="4"/>
+      <file name="EconomyParticipant.ts" path="D:\Fardbot\BonkleBuckTypes\src\BlockData\EconomyParticipant.ts">
+        <metrics statements="15" coveredstatements="15" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="19" count="8" type="stmt"/>
+        <line num="20" count="7" type="stmt"/>
+        <line num="21" count="7" type="stmt"/>
+        <line num="22" count="7" type="stmt"/>
+        <line num="23" count="7" type="stmt"/>
+        <line num="24" count="7" type="stmt"/>
+        <line num="32" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="35" count="5" type="stmt"/>
+        <line num="44" count="2" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+      </file>
+      <file name="Medium.ts" path="D:\Fardbot\BonkleBuckTypes\src\BlockData\Medium.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="9" count="13" type="stmt"/>
+      </file>
+    </package>
+    <package name="BlockData.Goods">
+      <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+      <file name="Token.ts" path="D:\Fardbot\BonkleBuckTypes\src\BlockData\Goods\Token.ts">
+        <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="14" count="25" type="stmt"/>
+        <line num="15" count="24" type="stmt"/>
+        <line num="16" count="24" type="stmt"/>
+        <line num="17" count="24" type="stmt"/>
+        <line num="25" count="3" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="36" count="4" type="stmt"/>
+        <line num="37" count="3" type="stmt"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

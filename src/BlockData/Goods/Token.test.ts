@@ -31,6 +31,10 @@ describe('Test Token Functions', () => {
     let t1: Token;
     let t2: Token;
 
+    /**
+    * Make 2 tokens are being added together
+    */
+
     test('Test 1: Add 2 tokens together', () => {
         t1 = new Token("a", 10);
         t2 = new Token("a", 100);
@@ -49,6 +53,10 @@ describe('Test Token Functions', () => {
         expect(t2.amount).toEqual(0);
     })
 
+    /**
+    * Make sure invalid tokens being added throws an error
+    */
+
     test('Test 2: Add 2 invalid tokens together', () => {
         t1 = new Token("a", 10);
         t2 = new Token("b", 100);
@@ -61,8 +69,12 @@ describe('Test Token Functions', () => {
         expect(t2.amount).toEqual(100);
     })
 
+   /**
+    * Make sure subtracting tokens works as intended, IE: for values >= 0
+    */
+
     test('Test 3: Subtract 2 tokens together', () => {
-        t1 = new Token("a", 100);
+        t1 = new Token("a", 10);
         t2 = new Token("a", 10);
 
         const t1Remove = jest.spyOn(t1, 'remove');
@@ -75,19 +87,19 @@ describe('Test Token Functions', () => {
         expect(t2Remove).toBeCalledTimes(0)
 
         // Test Post Conditions
-        expect(t1.amount).toEqual(90);
+        expect(t1.amount).toEqual(0);
         expect(t2.amount).toEqual(0);
     })
 
     test('Test 4: Subtract 2 tokens together with the resultant to be negative', () => {
         t1 = new Token("a", 10);
-        t2 = new Token("a", 100);
+        t2 = new Token("a", 10.01);
 
         expect(() => t1.remove(t2)).toThrow("Cannot subtract, not enough tokens to subtract");
 
         // Test Post Conditions
         expect(t1.amount).toEqual(10);
-        expect(t2.amount).toEqual(100);
+        expect(t2.amount).toEqual(10.01);
     })
 
     test('Test 5: Subtract 2 tokens together with different names', () => {

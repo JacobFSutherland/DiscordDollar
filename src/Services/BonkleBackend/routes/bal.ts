@@ -9,7 +9,7 @@ const router: Router = Router();
  */
 export default function (assets: AssetControler): Router {
     router.get('/:id/:assetName', (req: Request, res: Response) => {
-
+        
     })
 
     return router;

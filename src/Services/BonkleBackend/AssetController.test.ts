@@ -2,6 +2,7 @@ import AssetController from "./AssetController";
 import EconomyParticipant from "../../BlockData/EconomyParticipant";
 import FungibleAsset from "../../BlockData/FungibleAssets/FungibleAsset";
 import NFT from "../../BlockData/NonFungibleAssets/NFT";
+import NonFungibleAsset from "../../BlockData/NonFungibleAssets/NonFungibleAsset";
 
 jest.mock("../../BlockData/EconomyParticipant");
 
@@ -36,10 +37,23 @@ describe('Test Constructor', () => {
         expect(EconomyParticipant).toBeCalledTimes(1);
     })
 
-    test("Test 4: Make sure a new user is created when removing an asset from a user that does not have the asset", () => {
+    test("Test 4: Make sure a new user is created when removing an asset from a user that does not exist", () => {
         let asset2 = new FungibleAsset('test asset', 1, "Asset");
         a.remAsset("super new user 1", asset2);
         expect(EconomyParticipant).toBeCalledTimes(1);
+    })
+
+    test("Test 6: add and remove a non-fungible and fungible asset", () => {
+        let asset1 = new FungibleAsset('test asset', 1, "Asset");
+        let asset2 = new NonFungibleAsset("asset");
+        a.addAsset("addAndRemoveUser" , asset1);
+        a.addAsset("addAndRemoveUser", asset2);
+        a.remAsset("addAndRemoveUser" , asset1);
+        a.remAsset("addAndRemoveUser", asset2);
+        expect(a.userAssets["addAndRemoveUser"].addFungibleAsset).toBeCalledTimes(1)
+        expect(a.userAssets["addAndRemoveUser"].addNonFungibleAsset).toBeCalledTimes(1)
+        expect(a.userAssets["addAndRemoveUser"].removeFungibleAsset).toBeCalledTimes(1)
+        expect(a.userAssets["addAndRemoveUser"].removeNonFungibleAsset).toBeCalledTimes(1)
     })
 
 })

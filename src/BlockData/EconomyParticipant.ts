@@ -38,25 +38,25 @@ export default class EconomyParticipant{
         delete this.nonFungibleAssets[asset.id];
     }
 
-        /**
+    /**
      * @description Assets of the same name are automatically added together
      * @param asset The asset being added to the Discord user. 
      */
-         addFungibleAsset(asset: FungibleAsset){
-            if(this.fungibleAssets[asset.name]){ 
-                this.fungibleAssets[asset.name].add(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
-            }else{
-                this.fungibleAssets[asset.name] = new FungibleAsset(asset.name, asset.amount, asset.type); // if the asset does not exist within the user's known token balances, the asset is cloned and set.
-            }//if
-        } //addToken
-    
-        /**
-         * 
-         * @param asset The asset being subtracted from the Discord user. 
-         */
-        removeFungibleAsset(asset: FungibleAsset){
-            assert(this.fungibleAssets[asset.name], `Asset not found in user ${this.discordID}`);
-            this.fungibleAssets[asset.name].remove(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
-        }
+    addFungibleAsset(asset: FungibleAsset){
+        if(this.fungibleAssets[asset.name]){ 
+            this.fungibleAssets[asset.name].add(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
+        }else{
+            this.fungibleAssets[asset.name] = new FungibleAsset(asset.name, asset.amount, asset.type); // if the asset does not exist within the user's known token balances, the asset is cloned and set.
+        }//if
+    } //addToken
+
+    /**
+     * 
+     * @param asset The asset being subtracted from the Discord user. 
+     */
+    removeFungibleAsset(asset: FungibleAsset){
+        assert(this.fungibleAssets[asset.name], `Asset not found in user ${this.discordID}`);
+        this.fungibleAssets[asset.name].remove(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
+    }//removeFungibleAsset
 
 }

@@ -36,7 +36,7 @@ export default class AssetControler{
      * @param a The Asset you are adding to the user
      */
 
-     remAsset(u: string, a: FungibleAsset | NonFungibleAsset){
+    remAsset(u: string, a: FungibleAsset | NonFungibleAsset){
         // If the participant recieving the asset does not exist, create a new participant for that user.
         if(!this.userAssets[u]){
             this.userAssets[u] = new EconomyParticipant(u);
@@ -45,5 +45,4 @@ export default class AssetControler{
         this.userAssets[u].removeFungibleAsset(a):
         this.userAssets[u].removeNonFungibleAsset(a);
     }
-
 }

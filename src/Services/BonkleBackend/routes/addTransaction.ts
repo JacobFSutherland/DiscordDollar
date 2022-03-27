@@ -5,15 +5,14 @@ import NonFungibleAsset from "../../../BlockData/NonFungibleAssets/NonFungibleAs
 import AssetControler from "../AssetController";
 import BlockController from "../BlockController";
 
-const router: Router = Router();
-router.use(json());
-
 /**
  * 
- * @param assets The asset controller that will be used to process the transaction
+ * @param assets The asset controller that will be used to validate, and process the transaction
  */
 export default (assets: AssetControler, block: BlockController): Router => {
+    const router: Router = Router();
     router.post('/', (req: Request, res: Response) => {
+        res.setHeader('Content-Type', 'application/json');
         try{
             let body: Transaction = JSON.parse(req.body) as Transaction;
             let medium;
@@ -27,11 +26,12 @@ export default (assets: AssetControler, block: BlockController): Router => {
                     break;
             }
             //Add transaction to block
-        }catch(e) {
+            block.addTransaction(body);
+            res.status(200).end(JSON.stringify({status: 'success'}));
+        }catch(e) {   
             // We know if we catch an error, it was likely going to be an illegal transaction, IE: overspending
-            res.status(400).send("Error processing transaction");
+            res.status(400).end(JSON.stringify({status: 'error'}));
         }
     })
-
     return router;
 }

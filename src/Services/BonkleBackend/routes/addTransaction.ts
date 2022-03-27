@@ -1,10 +1,7 @@
 import { Router, Request, Response, json } from "express";
 import { Transaction } from "../../../BlockData";
-import EconomyParticipant from "../../../BlockData/EconomyParticipant";
 import FungibleAsset from "../../../BlockData/FungibleAssets/FungibleAsset";
-import Asset from "../../../BlockData/FungibleAssets/FungibleAsset";
 import NonFungibleAsset from "../../../BlockData/NonFungibleAssets/NonFungibleAsset";
-import Service from "../../../BlockData/Services/Service";
 import AssetControler from "../AssetController";
 import BlockController from "../BlockController";
 
@@ -22,21 +19,17 @@ export default (assets: AssetControler, block: BlockController): Router => {
             let medium;
             switch(body.medium.callerType){
                 case 'NonFungibleAsset':
-                        medium = body.medium as NonFungibleAsset;
-                    break;
                 case 'FungibleAsset':
-                        medium = body.medium as NonFungibleAsset
+                    medium = body.medium as FungibleAsset | NonFungibleAsset
+                    assets.remAsset(body.sender, medium);
                     break;
                 case 'Service':
-                        medium = body.medium as Service
                     break;
             }
-            
-            
-
+            //Add transaction to block
         }catch(e) {
+            // We know if we catch an error, it was likely going to be an illegal transaction, IE: overspending
             res.status(400).send("Error processing transaction");
-
         }
     })
 

@@ -1,3 +1,4 @@
+import assert from "assert";
 import { Router, Request, Response, json } from "express";
 import { Transaction } from "../../../BlockData";
 import FungibleAsset from "../../../BlockData/FungibleAssets/FungibleAsset";
@@ -14,23 +15,21 @@ export default (assets: AssetControler, block: BlockController): Router => {
     router.post('/', (req: Request, res: Response) => {
         res.setHeader('Content-Type', 'application/json');
         try{
-            let body: Transaction = JSON.parse(req.body) as Transaction;
-            let medium;
+            let body: Transaction = req.body as Transaction;
+            let medium: FungibleAsset | NonFungibleAsset;
             switch(body.medium.callerType){
                 case 'NonFungibleAsset':
                 case 'FungibleAsset':
                     medium = body.medium as FungibleAsset | NonFungibleAsset
                     assets.remAsset(body.sender, medium);
                     break;
-                case 'Service':
-                    break;
             }
             //Add transaction to block
             block.addTransaction(body);
-            res.status(200).end(JSON.stringify({status: 'success'}));
-        }catch(e) {   
+            res.status(200).send(JSON.stringify({status: 'success'}));
+        }catch(e: any) {   
             // We know if we catch an error, it was likely going to be an illegal transaction, IE: overspending
-            res.status(400).end(JSON.stringify({status: 'error'}));
+            res.status(400).send({error: e});
         }
     })
     return router;

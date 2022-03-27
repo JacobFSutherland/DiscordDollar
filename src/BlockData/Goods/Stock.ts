@@ -1,4 +1,4 @@
-import { assert } from "console";
+import assert from "assert";
 import Medium from "../Medium";
 
 export default class Stock extends Medium {

@@ -2,7 +2,6 @@ import FungibleAsset from "../../BlockData/FungibleAssets/FungibleAsset";
 import EconomyParticipant from "../../BlockData/EconomyParticipant";
 import TSMap from "../../BlockData/TSMap";
 import NonFungibleAsset from "../../BlockData/NonFungibleAssets/NonFungibleAsset";
-
 export default class AssetControler{
     userAssets: TSMap<EconomyParticipant>;
 
@@ -41,8 +40,10 @@ export default class AssetControler{
         if(!this.userAssets[u]){
             this.userAssets[u] = new EconomyParticipant(u);
         }
-        (a instanceof FungibleAsset)?
-        this.userAssets[u].removeFungibleAsset(a):
-        this.userAssets[u].removeNonFungibleAsset(a);
+        if(a.callerType === 'FungibleAsset'){
+            this.userAssets[u].removeFungibleAsset(a as FungibleAsset);
+        }else{
+            this.userAssets[u].removeNonFungibleAsset(a as NonFungibleAsset);
+        }
     }
 }

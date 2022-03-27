@@ -11,9 +11,8 @@ import { Transaction } from '../../../BlockData';
 
 let assetController = new AssetControler();
 let blockController = new BlockController();
-let addTransactionSpy = jest.spyOn(blockController, 'addTransaction');
 const app = Express()
-app.use('/', addTransaction(assetController, blockController));
+app.use(Express.json());
 
 let token1 = "Example Token 1";
 let token2 = "Example Token 2";
@@ -42,6 +41,8 @@ let s1 = new Stock("$BB", 10);
 let s2 = new Stock("$GME", 2);
 let s3 = new Stock("$FRT", 5);
 
+app.use('/', addTransaction(assetController, blockController));
+
 describe ("POST /AddTransaction", () => {
 
     // Adding all assets manually into asset controller
@@ -69,11 +70,10 @@ describe ("POST /AddTransaction", () => {
 
             let T = new Transaction(user1, new Token(token1, 20), user2);
             let res = await request(app).post('/').send(T)
-            expect(res.headers['content-type']).toContain('json');
-            expect(res.statusCode).toBe(400);
             expect(assetController.userAssets[user1].fungibleAssets[token1].amount).toBe(t1.amount);
             expect(assetController.userAssets[user2].fungibleAssets[token1].amount).toBe(t2.amount);
-            expect(addTransactionSpy).toBeCalledTimes(0);
+            expect(res.headers['content-type']).toContain('json');
+            expect(res.statusCode).toBe(400);
 
         })// test
 
@@ -84,10 +84,9 @@ describe ("POST /AddTransaction", () => {
             let T = new Transaction(user1, new Token("Non-existant Token", 20), user2);
             const res = await request(app).post('/').send(T)
             expect(res.headers['content-type']).toContain('json');
-            expect(res.statusCode).toBe(400);
             expect(assetController.userAssets[user1].fungibleAssets["Non-Existant Token"]).toBeUndefined()
             expect(assetController.userAssets[user2].fungibleAssets["Non-Existant Token"]).toBeUndefined()
-            expect(addTransactionSpy).toBeCalledTimes(0);
+            expect(res.statusCode).toBe(400);
 
         })// test
 
@@ -98,10 +97,9 @@ describe ("POST /AddTransaction", () => {
             let T = new Transaction(user1, NFA3, user2);
             const res = await request(app).post('/').send(T)
             expect(res.headers['content-type']).toContain('json');
-            expect(res.statusCode).toBe(400);
             expect(assetController.userAssets[user1].nonFungibleAssets[NFA3.id]).toBeUndefined()
             expect(assetController.userAssets[user2].nonFungibleAssets[NFA3.id]).toBeUndefined()
-            expect(addTransactionSpy).toBeCalledTimes(0);
+            expect(res.statusCode).toBe(400);
         })
 
         test("A user that has not participated in the economy has just tried to send tokens", async () => {
@@ -110,13 +108,28 @@ describe ("POST /AddTransaction", () => {
 
             let T = new Transaction(user1, t1, user4);
             let res = await request(app).post('/').send(T)
-            expect(res.headers['content-type']).toContain('json');
             expect(res.statusCode).toBe(400);
-            expect(assetController.userAssets[user4]).toBeUndefined()
+            expect(assetController.userAssets[user4].fungibleAssets[token1]).toBeUndefined()
             expect(assetController.userAssets[user2].fungibleAssets[token1].amount).toBe(t2.amount)
-            expect(addTransactionSpy).toBeCalledTimes(0);
 
         })// test
+    })
+
+    describe ("Testing valid transactions:", () => {
+
+        test("User1 sends a token they have enough of to user 2", async () => {
+
+            // Transaction of user 1 sending Token 1 to user 1
+
+            let T = new Transaction(user2, new Token(token1, 2), user1);
+            let res = await request(app).post('/').send(T)
+            expect(res.headers['content-type']).toContain('json');
+            expect(res.statusCode).toBe(200);
+            expect(assetController.userAssets[user1].fungibleAssets[token1].amount).toBe(t1.amount - 2);
+            expect(assetController.userAssets[user2].fungibleAssets[token1].amount).toBe(t2.amount);
+
+        })// test
+
     })
 
 });

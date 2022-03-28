@@ -5,7 +5,7 @@ import { Transaction } from "../Transaction";
 export default class Block {
     private transactions: Transaction[];
     startTime: number;
-    private captcha: DiscordCaptcha
+    captcha: DiscordCaptcha
     reward: number;
     private isSolved: boolean;
 

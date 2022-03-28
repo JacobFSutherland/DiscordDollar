@@ -62,6 +62,10 @@ export default class BlockController{
         return false;
     }
 
+    getBlockTransactions(): Transaction[]{
+        return this.currentBlock.getTransactions();
+    }
+
     async createNewBlock(tc: TextChannel){
         this.currentBlock = new Block(new DiscordCaptcha());
         let image = new MessageAttachment(this.currentBlock.captcha.PNGStream(), 'captcha.png');;

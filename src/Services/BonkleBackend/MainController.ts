@@ -74,23 +74,34 @@ export default class MainController{
     initBotWatcherCommands(){
         this.readerbot.on('messageCreate', (message) => {
 
-            switch(message.channelId){
-                case this.chainChannel.id:
-                    // New block guess
-                    let guess: BlockGuess = {
-                        author: message.author.id,
-                        solution: message.content,
-                    }
-                    // Check if solution was actually correct
-                    if(this.blockController.isCorrectSolution(guess)){
-                        // Since the solution is correct, we want to process the block for posting
-                        this.blockController.transferPendingToSubmitBlock();
-                        this.chainChannel.send({embeds: [this.blockController.blockToEmbed()]})
-                    }
-                    break;
-                case this.chainChannel.id:
-                    // New block posted
-                    break;
+            if(message.channelId == this.chainChannel.id){
+                // New block guess
+                let guess: BlockGuess = {
+                    author: message.author.id,
+                    solution: message.content,
+                }
+                // Check if solution was actually correct
+                if(this.blockController.isCorrectSolution(guess)){
+                    // Since the solution is correct, we want to process the block for posting
+                    this.blockController.transferPendingToSubmitBlock();
+                    this.chainChannel.send({embeds: [this.blockController.blockToEmbed()]})
+
+                    // All the transactions on the block that was just solved
+                    let transactions = this.blockController.getBlockTransactions();
+
+                    transactions.forEach(transaction => {
+                        // We only add the assets because we removed them when we put the initial transactions onto the block
+                        switch(transaction.medium.callerType){
+                            case 'FungibleAsset':
+                                this.assetController.addAsset(transaction.reciver, transaction.medium as FungibleAsset)
+                            break;
+                            case 'NonFungibleAsset':
+                                this.assetController.addAsset(transaction.reciver, transaction.medium as NonFungibleAsset)
+                            break;
+                        }
+                    });
+
+                }
             }
         })
     }

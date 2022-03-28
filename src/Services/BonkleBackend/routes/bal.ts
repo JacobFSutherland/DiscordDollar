@@ -8,8 +8,12 @@ const router: Router = Router();
  * @param assets The asset controller that will be used to process the balance queries
  */
 export default function (assets: AssetControler): Router {
-    router.get('/:id/:assetName', (req: Request, res: Response) => {
-        
+    const router: Router = Router();
+    router.get('/:id', (req: Request, res: Response) => {
+        res.setHeader('Content-Type', 'application/json');
+        if(assets.userAssets[req.params.id])
+            res.status(200).send(assets.userAssets[req.params.id]);
+        res.status(404).send({});
     })
 
     return router;

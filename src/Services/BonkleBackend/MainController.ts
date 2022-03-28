@@ -8,6 +8,7 @@ import { DiscordCaptcha } from "../../BlockData/Captcha/DiscordCaptcha";
 import { Transaction } from "../../BlockData";
 import FungibleAsset from "../../BlockData/FungibleAssets/FungibleAsset";
 import NonFungibleAsset from "../../BlockData/NonFungibleAssets/NonFungibleAsset";
+import { BlockGuess } from "../../BlockData/Block/BlockGuess";
 
 
 export default class MainController{
@@ -69,6 +70,30 @@ export default class MainController{
         });
 
     }// init
+
+    initBotWatcherCommands(){
+        this.readerbot.on('messageCreate', (message) => {
+
+            switch(message.channelId){
+                case this.chainChannel.id:
+                    // New block guess
+                    let guess: BlockGuess = {
+                        author: message.author.id,
+                        solution: message.content,
+                    }
+                    // Check if solution was actually correct
+                    if(this.blockController.isCorrectSolution(guess)){
+                        // Since the solution is correct, we want to process the block for posting
+                        this.blockController.transferPendingToSubmitBlock();
+                        this.blockController.blockToEmbed();
+                    }
+                    break;
+                case this.chainChannel.id:
+                    // New block posted
+                    break;
+            }
+        })
+    }
 
     async fetchBlocksFromChannel(): Promise<Message[]> {
         let blocks: Message[] = [];

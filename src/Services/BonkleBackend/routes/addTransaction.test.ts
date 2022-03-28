@@ -8,9 +8,11 @@ import Token from '../../../BlockData/FungibleAssets/Token';
 import Stock from '../../../BlockData/FungibleAssets/Stock';
 import NFT from '../../../BlockData/NonFungibleAssets/NFT';
 import { Transaction } from '../../../BlockData';
+import Block from '../../../BlockData/Block/Block';
+import { DiscordCaptcha } from '../../../BlockData/Captcha/DiscordCaptcha';
 
 let assetController = new AssetControler();
-let blockController = new BlockController();
+let blockController = new BlockController("Test Token", new Block(new DiscordCaptcha()));
 const app = Express()
 app.use(Express.json());
 

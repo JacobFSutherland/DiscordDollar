@@ -2,33 +2,43 @@ import AssetControler from "./AssetController";
 import BlockController from "./BlockController";
 import express, { Express } from "express";
 import router from './routes';
-import { Client, Intents } from 'discord.js';
+import { Client, Intents, TextChannel, Message } from 'discord.js';
 import Block from "../../BlockData/Block/Block";
 import { DiscordCaptcha } from "../../BlockData/Captcha/DiscordCaptcha";
+import { Transaction } from "../../BlockData";
 
 
 export default class MainController{
     private assetController: AssetControler;
     private blockController: BlockController;
     private backendInterface: Express;
-    private readerbot: Client;
-    private chainChannel: string;
-    private secret: string;
     private MinableTokenName: string;
+
+    readerbot: Client;
+    chainChannel: TextChannel;
+    readGuesses: TextChannel;
     /**
      * 
-     * @param botSecret The secret to the discord bot that will be used to house the chain
+     * @param botInstance The discord bot that will be used to house, and maintain the chain
      * @param chainChannel The text channel that the chain will be maintained
+     * @param miningChannel The text chanel that will be used to read in people's solutions to the captcha
      * @param tokenName The default token that will be used for transacting
      */
-    constructor(botSecret: string, chainChannel: string, tokenName: string){
+    constructor(botInstance: Client, chainChannel: TextChannel, miningChannel: TextChannel, tokenName: string){
         this.assetController = new AssetControler();
+        this.readGuesses = miningChannel;
         this.blockController = new BlockController(tokenName, new Block(new DiscordCaptcha()));
         this.backendInterface = express()
-        this.readerbot = new Client({intents:[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_INTEGRATIONS, Intents.FLAGS.GUILD_VOICE_STATES]});
-        this.secret = botSecret;
+        this.readerbot = botInstance;
         this.chainChannel = chainChannel;
         this.MinableTokenName = tokenName;
+    }
+    /**
+     * 
+     * @returns An array of discord intents that are needed by the bot to properly interface with the Bonkle Buck Backend
+     */
+    static intents(): {intents: number[]} {
+       return {intents:[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_INTEGRATIONS, Intents.FLAGS.GUILD_VOICE_STATES]};
     }
 
 
@@ -40,8 +50,43 @@ export default class MainController{
         this.backendInterface.use(express.json());
         this.backendInterface.use('/', router(this.assetController, this.blockController));
         this.backendInterface.listen(3000);
-        await this.readerbot.login(this.secret);
+
     }// init
+
+    async fetchBlocksFromChannel(): Promise<Message[]> {
+        let blocks: Message[] = [];
+        let lastID;
+        while(true){
+            const fetchedBlocks: any = await this.chainChannel.messages.fetch({
+                limit: 100,
+                ...(lastID && { before: lastID }),
+            });;
+
+            if (fetchedBlocks.size === 0) {
+                console.log(JSON.stringify(fetchedBlocks));
+                return blocks.reverse();
+            }
+            console.log(`Adding ${fetchedBlocks.size} Blocks`);
+            blocks = blocks.concat(Array.from(fetchedBlocks.values()));
+            lastID = fetchedBlocks.lastKey();
+        }
+    }
+
+    static async parseBlocksToTransactions(blocks: Message[]): Promise<Transaction[]> {
+        let transactions: Transaction[] = [];
+        blocks.forEach(block => {
+            let blockTransactions = block.embeds[0].fields;
+            // Parses Blocks into all it's original Transactions
+            for(let i = 2; i < blockTransactions.length; i++){
+                let t = JSON.parse(blockTransactions[i].value.slice(1, blockTransactions[i].value.length-1)) as Transaction;
+                transactions.push(t);
+            }
+        });
+        return transactions; 
+    }
+
+
+
 
 
 }

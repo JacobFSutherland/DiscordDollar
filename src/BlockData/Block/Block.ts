@@ -70,7 +70,6 @@ export default class Block {
 
     toEmbed(): MessageEmbed {
         let embed: MessageEmbed = new MessageEmbed()
-        embed.setTitle("New Block");
         let i = 1;
         this.transactions.forEach(transaction => {
             embed.addField(`Transaction ${i++}`, `\`${JSON.stringify(transaction)}\``, false)

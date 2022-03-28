@@ -85,7 +85,7 @@ export default class MainController{
                     if(this.blockController.isCorrectSolution(guess)){
                         // Since the solution is correct, we want to process the block for posting
                         this.blockController.transferPendingToSubmitBlock();
-                        this.blockController.blockToEmbed();
+                        this.chainChannel.send({embeds: [this.blockController.blockToEmbed()]})
                     }
                     break;
                 case this.chainChannel.id:
@@ -119,7 +119,7 @@ export default class MainController{
         blocks.forEach(block => {
             let blockTransactions = block.embeds[0].fields;
             // Parses Blocks into all it's original Transactions
-            for(let i = 2; i < blockTransactions.length; i++){
+            for(let i = 0; i < blockTransactions.length; i++){
                 let t = JSON.parse(blockTransactions[i].value.slice(1, blockTransactions[i].value.length-1)) as Transaction;
                 transactions.push(t);
             }

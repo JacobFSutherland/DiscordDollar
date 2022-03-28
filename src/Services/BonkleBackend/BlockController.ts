@@ -20,7 +20,7 @@ export default class BlockController{
 
     }
     /**
-     * @describe Move pending transactions to the block
+     * @description Move pending transactions to the block
      */
     transferPendingToSubmitBlock(){
         // Try to pop the next 19 pending transactions onto the block, if we catch, we know the queue is empty 
@@ -30,6 +30,13 @@ export default class BlockController{
             // Add the next transaction in queue to the block
             if(transaction) this.currentBlock.addTransaction(transaction);
         }
+    }
+
+    /**
+     * @description Turn the block into a discord embed
+     */
+    blockToEmbed(): MessageEmbed {
+        return this.currentBlock.toEmbed();
     }
 
     /**

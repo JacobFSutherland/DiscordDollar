@@ -1,8 +1,11 @@
 import { DiscordCaptcha } from "../Captcha/DiscordCaptcha";
 import { Transaction } from "../Transaction";
+import { MessageEmbed } from "discord.js"
+import e from "express";
 
 
 export default class Block {
+
     private transactions: Transaction[];
     startTime: number;
     captcha: DiscordCaptcha
@@ -62,6 +65,18 @@ export default class Block {
      */
     getTransactions(): Transaction[]{
         return this.transactions;
+    }
+
+
+    toEmbed(): MessageEmbed {
+        let embed: MessageEmbed = new MessageEmbed()
+        embed.setTitle("New Block");
+        let i = 1;
+        this.transactions.forEach(transaction => {
+            embed.addField(`Transaction ${i++}`, `\`${JSON.stringify(transaction)}\``, false)
+        })
+            
+        return embed;
     }
 
 }

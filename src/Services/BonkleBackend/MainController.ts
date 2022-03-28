@@ -6,6 +6,8 @@ import { Client, Intents, TextChannel, Message } from 'discord.js';
 import Block from "../../BlockData/Block/Block";
 import { DiscordCaptcha } from "../../BlockData/Captcha/DiscordCaptcha";
 import { Transaction } from "../../BlockData";
+import FungibleAsset from "../../BlockData/FungibleAssets/FungibleAsset";
+import NonFungibleAsset from "../../BlockData/NonFungibleAssets/NonFungibleAsset";
 
 
 export default class MainController{
@@ -50,6 +52,21 @@ export default class MainController{
         this.backendInterface.use(express.json());
         this.backendInterface.use('/', router(this.assetController, this.blockController));
         this.backendInterface.listen(3000);
+
+        let transactions = await MainController.parseBlocksToTransactions(await this.fetchBlocksFromChannel());
+
+        transactions.forEach(transaction => {
+            switch(transaction.medium.callerType){
+                case 'FungibleAsset':
+                    this.assetController.addAsset(transaction.reciver, transaction.medium as FungibleAsset)
+                    this.assetController.remAsset(transaction.sender, transaction.medium as FungibleAsset)
+                break;
+                case 'NonFungibleAsset':
+                    this.assetController.addAsset(transaction.reciver, transaction.medium as NonFungibleAsset)
+                    this.assetController.remAsset(transaction.sender, transaction.medium as NonFungibleAsset)
+                break;
+            }
+        });
 
     }// init
 

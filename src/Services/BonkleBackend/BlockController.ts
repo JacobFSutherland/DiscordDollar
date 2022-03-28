@@ -1,7 +1,9 @@
 import { Transaction } from "../../BlockData";
 import Block from "../../BlockData/Block/Block";
 import { BlockGuess } from "../../BlockData/Block/BlockGuess";
+import { DiscordCaptcha } from "../../BlockData/Captcha/DiscordCaptcha";
 import Token from "../../BlockData/FungibleAssets/Token";
+import {MessageAttachment, MessageEmbed, TextChannel} from 'discord.js'
 
 export default class BlockController{
 
@@ -52,6 +54,14 @@ export default class BlockController{
         }
         return false;
     }
+
+    async createNewBlock(tc: TextChannel){
+        this.currentBlock = new Block(new DiscordCaptcha());
+        let image = new MessageAttachment(this.currentBlock.captcha.PNGStream(), 'captcha.png');;
+        let embeds = new MessageEmbed().addField('Question', 'Enter the text shown in the image below:');
+        await tc.send({files: [image]});
+        return;
+      }
 
 
 }

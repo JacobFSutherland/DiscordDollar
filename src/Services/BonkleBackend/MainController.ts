@@ -1,8 +1,7 @@
 import AssetControler from "./AssetController";
 import BlockController from "./BlockController";
 import express, { Express } from "express";
-import bal from './routes/bal';
-import addTransaction from './routes/addTransaction';
+import router from './routes';
 
 
 export default class MainController{
@@ -17,7 +16,7 @@ export default class MainController{
     }
 
     initWebServer(){
-        this.backendInterface.use('/bal', bal(this.assetController));
-        this.backendInterface.use('/addTrasaction', addTransaction(this.assetController, this.blockController))
+        this.backendInterface.use(express.json());
+        this.backendInterface.use('/', router(this.assetController, this.blockController));
     }
 }

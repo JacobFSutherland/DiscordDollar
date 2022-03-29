@@ -4,7 +4,7 @@ describe('Test Constructor', () => {
 
     test("Test 1: Make sure default constructor works", () => {
         let option = new Option("$ticker", 5, "Calls", 5.50);
-        expect(option.name).toEqual(Option.getOptionName('$ticker', "Calls", 5.50));
+        expect(option.name).toEqual(Option.getOptionName('$TICKER', "Calls", 5.50));
     })
 
     test("Test 2: Check $ requirement", () => {

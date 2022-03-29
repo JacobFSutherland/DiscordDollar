@@ -11,4 +11,9 @@ describe('Test Constructor', () => {
         expect(() => new Stock('$goodticker', -7)).toThrow()
     })
 
+    test("Test 3: Make ticker to Uppercase", () => {
+        let s = new Stock('$ticker', 5)
+        expect(s.name).toEqual('$TICKER');
+    })
+
 })

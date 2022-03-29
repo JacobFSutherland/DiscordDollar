@@ -11,6 +11,6 @@ export default class Stock extends FungibleAsset {
         assert(t.charAt(0) == '$', 'Your ticker requires a ticker symbol ($)'); // Check to make sure t is a proper ticker
         assert(a > 0, 'The amount of shares must be a positive value'); // Check to make sure a is a positive number
         assert(a % 1 === 0, 'The amount of shares must be a whole number value'); // Check to make sure a is a whole number
-        super(t, a, 'Stock');
+        super(t.toUpperCase(), a, 'Stock');
     }
 }

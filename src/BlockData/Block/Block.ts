@@ -6,7 +6,7 @@ import e from "express";
 
 export default class Block {
 
-    private transactions: Transaction[];
+    transactions: Transaction[];
     startTime: number;
     captcha: DiscordCaptcha
     reward: number;

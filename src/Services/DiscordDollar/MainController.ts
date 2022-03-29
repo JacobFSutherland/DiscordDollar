@@ -12,10 +12,10 @@ import { BlockGuess } from "../../BlockData/Block/BlockGuess";
 
 
 export default class MainController{
-    private assetController: AssetControler;
-    private blockController: BlockController;
-    private backendInterface: Express;
-    private MinableTokenName: string;
+    assetController: AssetControler;
+    blockController: BlockController;
+    backendInterface: Express;
+    MinableTokenName: string;
 
     readerbot: Client;
     chainChannel: TextChannel;
@@ -43,6 +43,14 @@ export default class MainController{
      */
     setAssetController(a: AssetControler){
         this.assetController = a;
+    }
+
+    /**
+     * 
+     * @param b 
+     */
+    addTestTransaction(t: Transaction){
+        this.blockController.addTransaction(t);
     }
 
     /**

@@ -7,10 +7,10 @@ import {MessageAttachment, MessageEmbed, TextChannel} from 'discord.js'
 
 export default class BlockController{
 
-    private pendingTransactions: Transaction[]
-    private currentBlock: Block;
-    private ocupied: boolean;
-    private mineableTokenName: string
+    pendingTransactions: Transaction[]
+    currentBlock: Block;
+    ocupied: boolean;
+    mineableTokenName: string
 
     constructor(mineableTokenName: string, block: Block){
         this.pendingTransactions = [];
@@ -76,9 +76,13 @@ export default class BlockController{
         this.currentBlock = new Block(new DiscordCaptcha());
         let image = new MessageAttachment(this.currentBlock.captcha.PNGStream(), 'captcha.png');;
         let embeds = new MessageEmbed().addField('Question', 'Enter the text shown in the image below:');
-        await tc.send({files: [image]});
+        try{
+            await tc.send({files: [image]});
+        }catch(e){
+            console.log('e: ', e);
+        }
         return;
-      }
+    }
 
 
 }

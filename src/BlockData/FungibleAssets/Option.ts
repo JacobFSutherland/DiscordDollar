@@ -18,6 +18,7 @@ export default class Option extends FungibleAsset {
         assert(a > 0, 'The amount of shares must be a positive value'); // Check to make sure a is a positive number
         assert(a % 1 === 0, 'The amount of shares must be a whole number value'); // Check to make sure a is a whole number
         assert(s > 0, 'The strike price of the option you are trying to purchase is 0. This may mean the stock does not exist');
+        t = t.toUpperCase()
         super(`${t}-${o}@${s}`, a, 'Option'); // UUID of option
         this.ticker = t;
         this.option = o;

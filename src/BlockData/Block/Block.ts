@@ -1,7 +1,6 @@
 import { DiscordCaptcha } from "../Captcha/DiscordCaptcha";
 import { Transaction } from "../Transaction";
 import { MessageEmbed } from "discord.js"
-import e from "express";
 
 
 export default class Block {

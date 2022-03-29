@@ -14,7 +14,7 @@ describe('Test Block Controller', () => {
         let blockController = new BlockController('Test Coin', block);
 
         let transferSpy = jest.spyOn(blockController, 'transferPendingToSubmitBlock');
-        let blockAdded = jest.spyOn(block, 'addTransaction');
+        let transactionAdded = jest.spyOn(block, 'addTransaction');
 
         let incorrectSolution = new BlockGuess("abc", 'tester1');
         let correctSolution = new BlockGuess(captcha.value(), 'tester2');
@@ -33,7 +33,7 @@ describe('Test Block Controller', () => {
         blockController.isCorrectSolution(correctSolution);
         
         expect(transferSpy).toBeCalledTimes(1);
-        expect(blockAdded).toBeCalledTimes(4);
+        expect(transactionAdded).toBeCalledTimes(4);
     })
 
     test('Overflow queue', () => {

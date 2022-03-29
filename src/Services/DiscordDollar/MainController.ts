@@ -12,9 +12,9 @@ import { BlockGuess } from "../../BlockData/Block/BlockGuess";
 
 
 export default class MainController{
-    assetController: AssetControler;
-    blockController: BlockController;
-    backendInterface: Express;
+    private assetController: AssetControler;
+    private blockController: BlockController;
+    private backendInterface: Express;
     MinableTokenName: string;
 
     readerbot: Client;
@@ -55,7 +55,7 @@ export default class MainController{
 
     /**
      * @description Setter for an asset controller 
-     * @param a Asset Controller
+     * @param b Block Controller
      */
     setBlockController(b: BlockController){
         this.blockController = b;
@@ -92,6 +92,11 @@ export default class MainController{
         });
     }
 
+    forceBlockPost(){
+        this.blockController.mockCorrectSolution('Mock');
+        this.chainChannel.send({embeds: [this.blockController.blockToEmbed()]})
+    }
+
     initBotWatcherCommands(){
         this.readerbot.on('messageCreate', (message) => {
 
@@ -104,7 +109,6 @@ export default class MainController{
                 // Check if solution was actually correct
                 if(this.blockController.isCorrectSolution(guess)){
                     // Since the solution is correct, we want to process the block for posting
-                    this.blockController.transferPendingToSubmitBlock();
                     this.chainChannel.send({embeds: [this.blockController.blockToEmbed()]})
 
                     // All the transactions on the block that was just solved

@@ -7,8 +7,8 @@ import {MessageAttachment, MessageEmbed, TextChannel} from 'discord.js'
 
 export default class BlockController{
 
-    pendingTransactions: Transaction[]
-    currentBlock: Block;
+    private pendingTransactions: Transaction[]
+    private currentBlock: Block;
     ocupied: boolean;
     mineableTokenName: string
 
@@ -66,6 +66,16 @@ export default class BlockController{
             return true;
         }
         return false;
+    }
+
+    mockCorrectSolution(authorName: string): boolean{
+        this.ocupied = true; // Attempt was the answer, lock the block so nobody else can access it
+        // Adding block reward transaction to the block
+        this.currentBlock.addTransaction(new Transaction(authorName, new Token(this.mineableTokenName, 69), 'BLOCK_REWARD'));
+        
+        // Fill block with pending transactions;
+        this.transferPendingToSubmitBlock();
+        return true;
     }
 
     getBlockTransactions(): Transaction[]{

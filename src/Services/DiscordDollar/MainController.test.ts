@@ -15,7 +15,7 @@ import BlockController from "./BlockController";
 import Block from "../../BlockData/Block/Block";
 import { DiscordCaptcha } from "../../BlockData/Captcha/DiscordCaptcha";
 
-jest.setTimeout(8000);
+jest.setTimeout(80000);
 
 const delay = (ms:number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -42,11 +42,13 @@ describe('Test Main Controller', () => {
             await testBot.login(env.testnetToken)
             testGuessChannel = await testBot.channels.fetch(env.testGuess) as TextChannel;
             testChainChannel = await testBot.channels.fetch(env.testChain) as TextChannel;
-            testMainController = new MainController(testBot, testChainChannel, testGuessChannel, 'Test Token');
-            testMainController.setAssetController(assetControler);
         })
 
         beforeEach(() => {
+
+            testMainController = new MainController(testBot, testChainChannel, testGuessChannel, 'Test Token');
+            testMainController.setAssetController(assetControler);
+
             t1 = new Token("Tester Token", 10.95);
             t2 = new Token("Super Tester Token", 5.12);
             t3 = new Token("Super Mega Tester Token", 9.32);
@@ -145,14 +147,18 @@ describe('Test Main Controller', () => {
 
         test('Posting a captcha', async () => {
 
+            let captcha = new DiscordCaptcha();
+            let block = new Block(captcha)
+            let blockController = new BlockController('Test Token', block);
+            testMainController.setBlockController(blockController);
+
             testMainController.initBotWatcherCommands();
             let assets = [t1, t2, t3, s1, s2, s3, o1, o2, o3, nft1, nft2, nft3, q1, q2, q3]
             assets = assets.sort(() => Math.random() - 0.5);
             assets.forEach(asset => {
                 testMainController.addTestTransaction(new Transaction('test reciever', asset, 'Sender'));
             })
-            await delay(2000)
-            await testGuessChannel.send(testMainController.blockController.currentBlock.captcha.value());
+            testMainController.forceBlockPost();
 
         })
 

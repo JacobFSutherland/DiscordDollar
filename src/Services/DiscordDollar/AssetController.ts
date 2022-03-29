@@ -22,9 +22,11 @@ export default class AssetControler{
         if(!this.userAssets[u]){
             this.userAssets[u] = new EconomyParticipant(u);
         }
-        (a instanceof FungibleAsset)?
-            this.userAssets[u].addFungibleAsset(a):
-            this.userAssets[u].addNonFungibleAsset(a);
+        if(a.callerType === 'FungibleAsset'){
+            this.userAssets[u].addFungibleAsset(a as FungibleAsset)
+        }else{
+            this.userAssets[u].addNonFungibleAsset(a as NonFungibleAsset);
+        }
     }
 
 
@@ -41,7 +43,7 @@ export default class AssetControler{
             this.userAssets[u] = new EconomyParticipant(u);
         }
         if(a.callerType === 'FungibleAsset'){
-            this.userAssets[u].removeFungibleAsset(a as FungibleAsset);
+            this.userAssets[u].removeFungibleAsset(a as FungibleAsset)
         }else{
             this.userAssets[u].removeNonFungibleAsset(a as NonFungibleAsset);
         }

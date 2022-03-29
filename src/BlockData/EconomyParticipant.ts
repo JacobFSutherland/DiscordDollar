@@ -76,7 +76,7 @@ export default class EconomyParticipant{
      */
     removeFungibleAsset(asset: FungibleAsset){
         assert(this.fungibleAssets[asset.name] || EconomyParticipant.negativeBalAllowed.includes(this.discordID), `Asset not found in user ${this.discordID}`);
-        this.fungibleAssets[asset.name].remove(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
+        if(!EconomyParticipant.negativeBalAllowed.includes(this.discordID)) this.fungibleAssets[asset.name].remove(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
     }//removeFungibleAsset
 
 }

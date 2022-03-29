@@ -36,6 +36,23 @@ export default class MainController{
         this.chainChannel = chainChannel;
         this.MinableTokenName = tokenName;
     }
+
+    /**
+     * @description Setter for an asset controller 
+     * @param a Asset Controller
+     */
+    setAssetController(a: AssetControler){
+        this.assetController = a;
+    }
+
+    /**
+     * @description Setter for an asset controller 
+     * @param a Asset Controller
+     */
+    setBlockController(b: BlockController){
+        this.blockController = b;
+    }
+
     /**
      * 
      * @returns An array of discord intents that are needed by the bot to properly interface with the Bonkle Buck Backend
@@ -49,25 +66,23 @@ export default class MainController{
     /**
      * @description Used to bind the webserver to the routes associated to the EPs of the Bonkle Buck API
      */
-    async init(transactions: Transaction[]): Promise<void>{
+    async init(): Promise<void>{
         this.backendInterface.use(express.json());
         this.backendInterface.use('/', router(this.assetController, this.blockController));
         this.backendInterface.listen(3000);
+    }// init
 
+    syncTransactions(transactions: Transaction[]): void {
         transactions.forEach(transaction => {
             switch(transaction.medium.callerType){
                 case 'FungibleAsset':
-                    this.assetController.addAsset(transaction.reciver, transaction.medium as FungibleAsset)
-                    this.assetController.remAsset(transaction.sender, transaction.medium as FungibleAsset)
-                break;
                 case 'NonFungibleAsset':
-                    this.assetController.addAsset(transaction.reciver, transaction.medium as NonFungibleAsset)
-                    this.assetController.remAsset(transaction.sender, transaction.medium as NonFungibleAsset)
+                    this.assetController.addAsset(transaction.reciver, transaction.medium as FungibleAsset | NonFungibleAsset)
+                    this.assetController.remAsset(transaction.sender, transaction.medium as FungibleAsset | NonFungibleAsset)
                 break;
             }
         });
-
-    }// init
+    }
 
     initBotWatcherCommands(){
         this.readerbot.on('messageCreate', (message) => {

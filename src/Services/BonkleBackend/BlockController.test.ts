@@ -48,15 +48,22 @@ describe('Test Block Controller', () => {
         let correctSolution = new BlockGuess(captcha.value(), 'tester2');
 
         for(let i = 0; i < 30; i++){
-            let t = new Transaction('reciever', new Token('Test', 100), 'sender');
+            let token = new Token('Tester', 100)
+            let t = new Transaction('reciever', token, 'sender');
             blockController.addTransaction(t);
         }
+
+
         expect(transferSpy).toBeCalledTimes(0);
         blockController.isCorrectSolution(incorrectSolution);
         expect(transferSpy).toBeCalledTimes(0);
+        expect(blockAdded).toBeCalledTimes(0);
+        expect(blockController.getPendingLength()).toEqual(30)
+
         blockController.isCorrectSolution(correctSolution);
         expect(transferSpy).toBeCalledTimes(1);
         expect(blockAdded).toBeCalledTimes(20);
+        expect(blockController.getPendingLength()).toEqual(11)
     })
 
 })

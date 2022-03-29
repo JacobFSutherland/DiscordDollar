@@ -19,7 +19,7 @@ export default class MainController{
 
     readerbot: Client;
     chainChannel: TextChannel;
-    readGuesses: TextChannel;
+    guessChannel: TextChannel;
     /**
      * 
      * @param botInstance The discord bot that will be used to house, and maintain the chain
@@ -29,7 +29,7 @@ export default class MainController{
      */
     constructor(botInstance: Client, chainChannel: TextChannel, miningChannel: TextChannel, tokenName: string){
         this.assetController = new AssetControler();
-        this.readGuesses = miningChannel;
+        this.guessChannel = miningChannel;
         this.blockController = new BlockController(tokenName, new Block(new DiscordCaptcha()));
         this.backendInterface = express()
         this.readerbot = botInstance;
@@ -49,12 +49,10 @@ export default class MainController{
     /**
      * @description Used to bind the webserver to the routes associated to the EPs of the Bonkle Buck API
      */
-    async init(): Promise<void>{
+    async init(transactions: Transaction[]): Promise<void>{
         this.backendInterface.use(express.json());
         this.backendInterface.use('/', router(this.assetController, this.blockController));
         this.backendInterface.listen(3000);
-
-        let transactions = await MainController.parseBlocksToTransactions(await this.fetchBlocksFromChannel());
 
         transactions.forEach(transaction => {
             switch(transaction.medium.callerType){
@@ -74,7 +72,7 @@ export default class MainController{
     initBotWatcherCommands(){
         this.readerbot.on('messageCreate', (message) => {
 
-            if(message.channelId == this.chainChannel.id){
+            if(message.channelId == this.guessChannel.id){
                 // New block guess
                 let guess: BlockGuess = {
                     author: message.author.id,
@@ -90,6 +88,7 @@ export default class MainController{
                     let transactions = this.blockController.getBlockTransactions();
 
                     transactions.forEach(transaction => {
+                        
                         // We only add the assets because we removed them when we put the initial transactions onto the block
                         switch(transaction.medium.callerType){
                             case 'FungibleAsset':
@@ -100,9 +99,10 @@ export default class MainController{
                             break;
                         }
                     });
+                    this.blockController.createNewBlock(this.guessChannel);
 
-                }
-            }
+                }//if
+            }//if
         })
     }
 
@@ -137,9 +137,5 @@ export default class MainController{
         });
         return transactions; 
     }
-
-
-
-
 
 }

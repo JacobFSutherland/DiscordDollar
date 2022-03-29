@@ -31,6 +31,13 @@ export default class BlockController{
             if(transaction) this.currentBlock.addTransaction(transaction);
         }
     }
+    /**
+     * 
+     * @returns The number of transactions waiting to be put into blocks
+     */
+    getPendingLength(): number {
+        return this.pendingTransactions.length;
+    }
 
     /**
      * @description Turn the block into a discord embed
@@ -45,8 +52,7 @@ export default class BlockController{
      */
     addTransaction(T: Transaction){
         // add transaction to pending
-        this.pendingTransactions.push(T);
-        
+        this.pendingTransactions.push(T);  
     }
 
     isCorrectSolution(guess: BlockGuess): boolean{
@@ -55,7 +61,7 @@ export default class BlockController{
             // Adding block reward transaction to the block
             this.currentBlock.addTransaction(new Transaction(guess.author, new Token(this.mineableTokenName, this.currentBlock.reward), 'BLOCK_REWARD'));
             
-            // Fill block with transactions;
+            // Fill block with pending transactions;
             this.transferPendingToSubmitBlock();
             return true;
         }

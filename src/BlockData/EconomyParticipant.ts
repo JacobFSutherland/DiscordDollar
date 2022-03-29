@@ -5,6 +5,7 @@ import NonFungibleAsset from "./NonFungibleAssets/NonFungibleAsset";
 
 export default class EconomyParticipant{
     static addedIDs: string[] = [];
+    private static negativeBalAllowed: string[] = ['BLOCK_REWARD'];
     discordID: string;
     fungibleAssets: TSMap<FungibleAsset>;
     nonFungibleAssets: TSMap<NonFungibleAsset>;
@@ -22,6 +23,25 @@ export default class EconomyParticipant{
     }
 
     /**
+     * @description Add a user, or admin id that will be allowed to have a negative balance
+     * @param id The ID of the user you will allow to have a negative balance
+     */
+    static GiveAdminBal(id: string): void {
+        EconomyParticipant.negativeBalAllowed.push(id);
+    }
+
+    /**
+     * 
+     * @description The users, or admin ids that are allowed to have a negative balance
+     */
+    static GetAdmins(): string[] {
+        return EconomyParticipant.negativeBalAllowed;
+    }
+    
+
+
+
+    /**
      * @description Assets of the same name are automatically added together
      * @param asset The asset being added to the Discord user. 
      */
@@ -30,12 +50,12 @@ export default class EconomyParticipant{
     } //addToken
 
     /**
-     * 
+     * @description Removes a non-fungible asset unless the user is a super user/administrator
      * @param asset The asset being subtracted from the Discord user. 
      */
     removeNonFungibleAsset(asset: NonFungibleAsset){
-        assert(this.nonFungibleAssets[asset.id] != undefined, `Asset not found in user ${this.discordID}`);
-        delete this.nonFungibleAssets[asset.id];
+        assert(this.nonFungibleAssets[asset.id] != undefined || EconomyParticipant.negativeBalAllowed.includes(this.discordID), `Asset not found in user ${this.discordID}`);
+        if(!EconomyParticipant.negativeBalAllowed.includes(this.discordID)) delete this.nonFungibleAssets[asset.id];
     }
 
     /**
@@ -55,7 +75,7 @@ export default class EconomyParticipant{
      * @param asset The asset being subtracted from the Discord user. 
      */
     removeFungibleAsset(asset: FungibleAsset){
-        assert(this.fungibleAssets[asset.name], `Asset not found in user ${this.discordID}`);
+        assert(this.fungibleAssets[asset.name] || EconomyParticipant.negativeBalAllowed.includes(this.discordID), `Asset not found in user ${this.discordID}`);
         this.fungibleAssets[asset.name].remove(asset); // if the asset exists within the user's known asset balances, the sums are totaled and updated accordingly.
     }//removeFungibleAsset
 

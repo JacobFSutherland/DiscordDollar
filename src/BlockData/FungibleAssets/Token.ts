@@ -10,7 +10,7 @@ export default class Token extends FungibleAsset {
      */
     constructor(n: string, a: number){
         assert(!n.includes('$'), 'The token cannot have a ($) in the name')
-        assert(a > 0, 'The token amount must be a positive value'); // Check to make sure a is a positive number
+        assert(a >= 0, 'The token amount must be a positive value'); // Check to make sure a is a positive number
         super(n, a, 'Token');
     }
 

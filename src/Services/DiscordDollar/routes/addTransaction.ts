@@ -12,7 +12,6 @@ import { BlockController} from "../BlockController";
 export default (assets: AssetController, block: BlockController): Router => {
     const router: Router = Router();
     router.post('/', (req: Request, res: Response) => {
-        res.setHeader('Content-Type', 'application/json');
         try{
             let body: Transaction = req.body as Transaction;
             let medium: FungibleAsset | NonFungibleAsset;

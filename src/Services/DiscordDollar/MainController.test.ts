@@ -1,25 +1,25 @@
-import MainController from "./MainController";
-import AssetController from "./AssetController";
+import { MainController } from "./MainController";
+import { AssetController } from './AssetController'
 import { Client, Intents, TextChannel, Message } from 'discord.js';
-import Token from "../../BlockData/FungibleAssets/Token";
-import Stock from "../../BlockData/FungibleAssets/Stock";
-import Option from "../../BlockData/FungibleAssets/Option";
+import {Token} from "../../BlockData/FungibleAssets/Token";
+import {Stock} from "../../BlockData/FungibleAssets/Stock";
+import {Option} from "../../BlockData/FungibleAssets/Option";
 import NFT from "../../BlockData/NonFungibleAssets/NFT";
 import Quote from "../../BlockData/NonFungibleAssets/Quotes";
 import { Transaction } from "../../BlockData";
 import env from '../../../env';
 import EconomyParticipant from "../../BlockData/EconomyParticipant";
-import FungibleAsset from "../../BlockData/FungibleAssets/FungibleAsset";
+import {FungibleAsset} from "../../BlockData/FungibleAssets/FungibleAsset";
 import NonFungibleAsset from "../../BlockData/NonFungibleAssets/NonFungibleAsset";
-import BlockController from "./BlockController";
-import Block from "../../BlockData/Block/Block";
+import {BlockController} from "./BlockController";
+import {Block} from "../../BlockData/Block/Block";
 import { DiscordCaptcha } from "../../BlockData/Captcha/DiscordCaptcha";
 
 jest.setTimeout(80000);
 
 const delay = (ms:number) => new Promise(resolve => setTimeout(resolve, ms))
 
-let assetControler = new AssetController();
+let assetController = new AssetController();
 let testBot: Client = new Client({intents:[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_INTEGRATIONS, Intents.FLAGS.GUILD_VOICE_STATES]});
 let testChainChannel: TextChannel; 
 let testGuessChannel: TextChannel;
@@ -47,7 +47,7 @@ describe('Test Main Controller', () => {
         beforeEach(() => {
 
             testMainController = new MainController(testBot, testChainChannel, testGuessChannel, 'Test Token');
-            testMainController.setAssetController(assetControler);
+            testMainController.setAssetController(assetController);
 
             t1 = new Token("Tester Token", 10.95);
             t2 = new Token("Super Tester Token", 5.12);
@@ -82,17 +82,17 @@ describe('Test Main Controller', () => {
 
             testMainController.syncTransactions(transactions);
 
-            expect(assetControler.userAssets['Reciever'].fungibleAssets[t1.name].amount).toEqual(t1.amount)
-            expect(assetControler.userAssets['Reciever'].fungibleAssets[t2.name].amount).toEqual(t2.amount)
-            expect(assetControler.userAssets['Reciever'].fungibleAssets[t3.name].amount).toEqual(t3.amount)
+            expect(assetController.userAssets['Reciever'].fungibleAssets[t1.name].amount).toEqual(t1.amount)
+            expect(assetController.userAssets['Reciever'].fungibleAssets[t2.name].amount).toEqual(t2.amount)
+            expect(assetController.userAssets['Reciever'].fungibleAssets[t3.name].amount).toEqual(t3.amount)
 
-            expect(assetControler.userAssets['Reciever'].fungibleAssets[s1.name].amount).toEqual(s1.amount)
-            expect(assetControler.userAssets['Reciever'].fungibleAssets[s2.name].amount).toEqual(s2.amount)
-            expect(assetControler.userAssets['Reciever'].fungibleAssets[s3.name].amount).toEqual(s3.amount)
+            expect(assetController.userAssets['Reciever'].fungibleAssets[s1.name].amount).toEqual(s1.amount)
+            expect(assetController.userAssets['Reciever'].fungibleAssets[s2.name].amount).toEqual(s2.amount)
+            expect(assetController.userAssets['Reciever'].fungibleAssets[s3.name].amount).toEqual(s3.amount)
 
-            expect(assetControler.userAssets['Reciever'].fungibleAssets[o1.name].amount).toEqual(o1.amount)
-            expect(assetControler.userAssets['Reciever'].fungibleAssets[o2.name].amount).toEqual(o2.amount)
-            expect(assetControler.userAssets['Reciever'].fungibleAssets[o3.name].amount).toEqual(o3.amount)
+            expect(assetController.userAssets['Reciever'].fungibleAssets[o1.name].amount).toEqual(o1.amount)
+            expect(assetController.userAssets['Reciever'].fungibleAssets[o2.name].amount).toEqual(o2.amount)
+            expect(assetController.userAssets['Reciever'].fungibleAssets[o3.name].amount).toEqual(o3.amount)
 
         })
 
@@ -105,13 +105,13 @@ describe('Test Main Controller', () => {
             })
             testMainController.syncTransactions(transactions);
 
-            expect(Object.keys(assetControler.userAssets['Reciever 1'].nonFungibleAssets)).toContain(nft1.id)
-            expect(Object.keys(assetControler.userAssets['Reciever 1'].nonFungibleAssets)).toContain(nft2.id)
-            expect(Object.keys(assetControler.userAssets['Reciever 1'].nonFungibleAssets)).toContain(nft3.id)
+            expect(Object.keys(assetController.userAssets['Reciever 1'].nonFungibleAssets)).toContain(nft1.id)
+            expect(Object.keys(assetController.userAssets['Reciever 1'].nonFungibleAssets)).toContain(nft2.id)
+            expect(Object.keys(assetController.userAssets['Reciever 1'].nonFungibleAssets)).toContain(nft3.id)
 
-            expect(Object.keys(assetControler.userAssets['Reciever 1'].nonFungibleAssets)).toContain(q1.id)
-            expect(Object.keys(assetControler.userAssets['Reciever 1'].nonFungibleAssets)).toContain(q2.id)
-            expect(Object.keys(assetControler.userAssets['Reciever 1'].nonFungibleAssets)).toContain(q3.id)
+            expect(Object.keys(assetController.userAssets['Reciever 1'].nonFungibleAssets)).toContain(q1.id)
+            expect(Object.keys(assetController.userAssets['Reciever 1'].nonFungibleAssets)).toContain(q2.id)
+            expect(Object.keys(assetController.userAssets['Reciever 1'].nonFungibleAssets)).toContain(q3.id)
         })
 
         test('Combination of multiple fungible, nonfungible assets and services', () => {
@@ -123,29 +123,29 @@ describe('Test Main Controller', () => {
             })
             testMainController.syncTransactions(transactions);
 
-            expect(Object.keys(assetControler.userAssets['Reciever 2'].nonFungibleAssets)).toContain(nft1.id)
-            expect(Object.keys(assetControler.userAssets['Reciever 2'].nonFungibleAssets)).toContain(nft2.id)
-            expect(Object.keys(assetControler.userAssets['Reciever 2'].nonFungibleAssets)).toContain(nft3.id)
+            expect(Object.keys(assetController.userAssets['Reciever 2'].nonFungibleAssets)).toContain(nft1.id)
+            expect(Object.keys(assetController.userAssets['Reciever 2'].nonFungibleAssets)).toContain(nft2.id)
+            expect(Object.keys(assetController.userAssets['Reciever 2'].nonFungibleAssets)).toContain(nft3.id)
 
-            expect(Object.keys(assetControler.userAssets['Reciever 2'].nonFungibleAssets)).toContain(q1.id)
-            expect(Object.keys(assetControler.userAssets['Reciever 2'].nonFungibleAssets)).toContain(q2.id)
-            expect(Object.keys(assetControler.userAssets['Reciever 2'].nonFungibleAssets)).toContain(q3.id)
+            expect(Object.keys(assetController.userAssets['Reciever 2'].nonFungibleAssets)).toContain(q1.id)
+            expect(Object.keys(assetController.userAssets['Reciever 2'].nonFungibleAssets)).toContain(q2.id)
+            expect(Object.keys(assetController.userAssets['Reciever 2'].nonFungibleAssets)).toContain(q3.id)
 
-            expect(assetControler.userAssets['Reciever 2'].fungibleAssets[t1.name].amount).toEqual(t1.amount)
-            expect(assetControler.userAssets['Reciever 2'].fungibleAssets[t2.name].amount).toEqual(t2.amount)
-            expect(assetControler.userAssets['Reciever 2'].fungibleAssets[t3.name].amount).toEqual(t3.amount)
+            expect(assetController.userAssets['Reciever 2'].fungibleAssets[t1.name].amount).toEqual(t1.amount)
+            expect(assetController.userAssets['Reciever 2'].fungibleAssets[t2.name].amount).toEqual(t2.amount)
+            expect(assetController.userAssets['Reciever 2'].fungibleAssets[t3.name].amount).toEqual(t3.amount)
 
-            expect(assetControler.userAssets['Reciever 2'].fungibleAssets[s1.name].amount).toEqual(s1.amount)
-            expect(assetControler.userAssets['Reciever 2'].fungibleAssets[s2.name].amount).toEqual(s2.amount)
-            expect(assetControler.userAssets['Reciever 2'].fungibleAssets[s3.name].amount).toEqual(s3.amount)
+            expect(assetController.userAssets['Reciever 2'].fungibleAssets[s1.name].amount).toEqual(s1.amount)
+            expect(assetController.userAssets['Reciever 2'].fungibleAssets[s2.name].amount).toEqual(s2.amount)
+            expect(assetController.userAssets['Reciever 2'].fungibleAssets[s3.name].amount).toEqual(s3.amount)
 
-            expect(assetControler.userAssets['Reciever 2'].fungibleAssets[o1.name].amount).toEqual(o1.amount)
-            expect(assetControler.userAssets['Reciever 2'].fungibleAssets[o2.name].amount).toEqual(o2.amount)
-            expect(assetControler.userAssets['Reciever 2'].fungibleAssets[o3.name].amount).toEqual(o3.amount)
+            expect(assetController.userAssets['Reciever 2'].fungibleAssets[o1.name].amount).toEqual(o1.amount)
+            expect(assetController.userAssets['Reciever 2'].fungibleAssets[o2.name].amount).toEqual(o2.amount)
+            expect(assetController.userAssets['Reciever 2'].fungibleAssets[o3.name].amount).toEqual(o3.amount)
 
         })
 
-        test('Posting a captcha', async () => {
+        test('Posting a block', async () => {
 
             let captcha = new DiscordCaptcha();
             let block = new Block(captcha)
@@ -160,6 +160,13 @@ describe('Test Main Controller', () => {
             })
             testMainController.forceBlockPost();
 
+        })
+
+        test('Reading in blocks', async () => {
+            let blocks = await testMainController.fetchBlocksFromChain();
+            //let transactions = MainController.parseBlocksToTransactions(blocks);
+            
+            
         })
 
     }) 

@@ -1,9 +1,9 @@
 import { Transaction } from "../../BlockData";
-import Block from "../../BlockData/Block/Block";
+import {Block} from "../../BlockData/Block/Block";
 import { BlockGuess } from "../../BlockData/Block/BlockGuess";
 import { DiscordCaptcha } from "../../BlockData/Captcha/DiscordCaptcha";
-import Token from "../../BlockData/FungibleAssets/Token";
-import BlockController from "./BlockController";
+import {Token} from "../../BlockData/FungibleAssets/Token";
+import {BlockController} from "./BlockController";
 
 
 describe('Test Block Controller', () => {

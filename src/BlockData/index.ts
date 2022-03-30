@@ -5,3 +5,5 @@ export * from './Medium';
 export * from './Transaction';
 export * from './EconomyParticipant';
 export * from './TSMap';
+export * from './Captcha';
+export * from './Services';

@@ -1,1 +1,2 @@
-export * from './';
+export * from './BlockData';
+export * from './Services';

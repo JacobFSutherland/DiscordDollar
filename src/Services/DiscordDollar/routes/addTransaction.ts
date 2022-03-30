@@ -1,16 +1,15 @@
-import assert from "assert";
 import { Router, Request, Response, json } from "express";
 import { Transaction } from "../../../BlockData";
-import FungibleAsset from "../../../BlockData/FungibleAssets/FungibleAsset";
+import { FungibleAsset } from "../../../BlockData/FungibleAssets/FungibleAsset";
 import NonFungibleAsset from "../../../BlockData/NonFungibleAssets/NonFungibleAsset";
-import AssetControler from "../AssetController";
-import BlockController from "../BlockController";
+import { AssetController } from "../AssetController";
+import { BlockController} from "../BlockController";
 
 /**
  * 
  * @param assets The asset controller that will be used to validate, and process the transaction
  */
-export default (assets: AssetControler, block: BlockController): Router => {
+export default (assets: AssetController, block: BlockController): Router => {
     const router: Router = Router();
     router.post('/', (req: Request, res: Response) => {
         res.setHeader('Content-Type', 'application/json');

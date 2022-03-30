@@ -1,7 +1,7 @@
 import assert from "assert";
-import FungibleAsset from "./FungibleAsset";
+import { FungibleAsset } from "./FungibleAsset";
 
-export default class Token extends FungibleAsset {
+export class Token extends FungibleAsset {
 
     /**
      * @description The constructor for the Token class

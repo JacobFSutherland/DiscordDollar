@@ -1,11 +1,11 @@
 import { Transaction } from "../../BlockData";
-import Block from "../../BlockData/Block/Block";
+import {Block} from "../../BlockData/Block/Block";
 import { BlockGuess } from "../../BlockData/Block/BlockGuess";
 import { DiscordCaptcha } from "../../BlockData/Captcha/DiscordCaptcha";
-import Token from "../../BlockData/FungibleAssets/Token";
+import {Token} from "../../BlockData/FungibleAssets/Token";
 import {MessageAttachment, MessageEmbed, TextChannel} from 'discord.js'
 
-export default class BlockController{
+export class BlockController{
 
     private pendingTransactions: Transaction[]
     private currentBlock: Block;
@@ -57,7 +57,6 @@ export default class BlockController{
 
     isCorrectSolution(guess: BlockGuess): boolean{
         if(!this.ocupied && this.currentBlock.checkAnswer(guess.solution)){
-            this.ocupied = true; // Attempt was the answer, lock the block so nobody else can access it
             // Adding block reward transaction to the block
             this.currentBlock.addTransaction(new Transaction(guess.author, new Token(this.mineableTokenName, this.currentBlock.reward), 'BLOCK_REWARD'));
             
@@ -82,16 +81,21 @@ export default class BlockController{
         return this.currentBlock.getTransactions();
     }
 
-    async createNewBlock(tc: TextChannel){
-        this.currentBlock = new Block(new DiscordCaptcha());
+
+    async createNewBlock(tc: TextChannel, captcha: DiscordCaptcha){
+        this.currentBlock = new Block(captcha);
+        await this.postCaptcha(tc);
+    }
+
+    async postCaptcha(tc: TextChannel){
         let image = new MessageAttachment(this.currentBlock.captcha.PNGStream(), 'captcha.png');;
         let embeds = new MessageEmbed().addField('Question', 'Enter the text shown in the image below:');
-        try{
-            await tc.send({files: [image]});
-        }catch(e){
-            console.log('e: ', e);
+        while(true){
+            try{
+                await tc.send({files: [image]});
+                break;
+            }catch(e){}
         }
-        return;
     }
 
 

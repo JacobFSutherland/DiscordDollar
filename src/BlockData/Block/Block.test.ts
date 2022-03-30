@@ -1,7 +1,7 @@
 import { DiscordCaptcha } from "../Captcha/DiscordCaptcha";
-import Token from "../FungibleAssets/Token";
+import { Token } from "../FungibleAssets/Token";
 import { Transaction } from "../Transaction";
-import Block from "./Block";
+import { Block } from "./Block";
 
 
 describe('Test Block Functions', () => {

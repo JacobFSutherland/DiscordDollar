@@ -1,7 +1,7 @@
 import assert from "assert";
-import FungibleAsset from "./FungibleAsset";
+import { FungibleAsset }  from "./FungibleAsset";
 
-export default class Stock extends FungibleAsset {
+export class Stock extends FungibleAsset {
     /**
      * 
      * @param t The ticker of the stock. The ticker must include the '$'

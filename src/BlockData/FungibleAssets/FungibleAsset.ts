@@ -1,7 +1,7 @@
 import assert from "assert";
 import Medium from "../Medium";
 
-export default class FungibleAsset extends Medium {
+export class FungibleAsset extends Medium {
 
     name: string;
     amount: number;

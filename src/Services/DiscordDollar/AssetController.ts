@@ -1,10 +1,10 @@
-import FungibleAsset from "../../BlockData/FungibleAssets/FungibleAsset";
+import { FungibleAsset } from "../../BlockData/FungibleAssets/FungibleAsset";
 import EconomyParticipant from "../../BlockData/EconomyParticipant";
 import TSMap from "../../BlockData/TSMap";
 import NonFungibleAsset from "../../BlockData/NonFungibleAssets/NonFungibleAsset";
 
 
-export default class AssetControler{
+export class AssetController{
     userAssets: TSMap<EconomyParticipant>;
 
     constructor(){

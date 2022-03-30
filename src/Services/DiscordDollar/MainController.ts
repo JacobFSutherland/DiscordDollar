@@ -1,18 +1,19 @@
-import AssetControler from "./AssetController";
-import BlockController from "./BlockController";
+import {AssetController} from "./AssetController";
+import {BlockController} from "./BlockController";
 import express, { Express } from "express";
 import router from './routes';
 import { Client, Intents, TextChannel, Message } from 'discord.js';
-import Block from "../../BlockData/Block/Block";
+import {Block} from "../../BlockData/Block/Block";
 import { DiscordCaptcha } from "../../BlockData/Captcha/DiscordCaptcha";
 import { Transaction } from "../../BlockData";
-import FungibleAsset from "../../BlockData/FungibleAssets/FungibleAsset";
+import {FungibleAsset} from "../../BlockData/FungibleAssets/FungibleAsset";
 import NonFungibleAsset from "../../BlockData/NonFungibleAssets/NonFungibleAsset";
 import { BlockGuess } from "../../BlockData/Block/BlockGuess";
 
 
-export default class MainController{
-    private assetController: AssetControler;
+export class MainController {
+    
+    private assetController: AssetController;
     private blockController: BlockController;
     private backendInterface: Express;
     MinableTokenName: string;
@@ -20,6 +21,7 @@ export default class MainController{
     readerbot: Client;
     chainChannel: TextChannel;
     guessChannel: TextChannel;
+
     /**
      * 
      * @param botInstance The discord bot that will be used to house, and maintain the chain
@@ -28,7 +30,7 @@ export default class MainController{
      * @param tokenName The default token that will be used for transacting
      */
     constructor(botInstance: Client, chainChannel: TextChannel, miningChannel: TextChannel, tokenName: string){
-        this.assetController = new AssetControler();
+        this.assetController = new AssetController();
         this.guessChannel = miningChannel;
         this.blockController = new BlockController(tokenName, new Block(new DiscordCaptcha()));
         this.backendInterface = express()
@@ -41,13 +43,13 @@ export default class MainController{
      * @description Setter for an asset controller 
      * @param a Asset Controller
      */
-    setAssetController(a: AssetControler){
+    setAssetController(a: AssetController){
         this.assetController = a;
     }
 
     /**
      * 
-     * @param b 
+     * @param b a test transaction being added to the block
      */
     addTestTransaction(t: Transaction){
         this.blockController.addTransaction(t);
@@ -80,6 +82,24 @@ export default class MainController{
         this.backendInterface.listen(3000);
     }// init
 
+
+    /**
+     * @description Starts the application with default settings
+     */
+    async autoStart(): Promise<void> {
+        let blocks = await this.fetchBlocksFromChain();
+        let transactions = MainController.parseBlocksToTransactions(blocks);
+        this.syncTransactions(transactions);
+        await this.init();
+        this.initBotWatcherCommands();
+        await this.blockController.postCaptcha(this.guessChannel);
+    }
+
+    /**
+     * @description Syncs the transactions provided
+     * @param transactions The transactions to be synced
+     * @returns void 
+     */
     syncTransactions(transactions: Transaction[]): void {
         transactions.forEach(transaction => {
             switch(transaction.medium.callerType){
@@ -92,11 +112,19 @@ export default class MainController{
         });
     }
 
+    /**
+     * @description Forces a block to be pushed to the chainChannel. Useful for debugging
+     * @returns void 
+     */
     forceBlockPost(){
         this.blockController.mockCorrectSolution('Mock');
         this.chainChannel.send({embeds: [this.blockController.blockToEmbed()]})
     }
 
+    /**
+     * @description Initializes the bot's command to listen for block solutions
+     * @returns void 
+     */
     initBotWatcherCommands(){
         this.readerbot.on('messageCreate', (message) => {
 
@@ -106,9 +134,13 @@ export default class MainController{
                     author: message.author.id,
                     solution: message.content,
                 }
+                console.log('Trying solution: ', message.content);
                 // Check if solution was actually correct
                 if(this.blockController.isCorrectSolution(guess)){
+
+                    console.log('solution was correct');
                     // Since the solution is correct, we want to process the block for posting
+                    this.blockController.ocupied = true; // Lock the block so nobody else can try to answer it
                     this.chainChannel.send({embeds: [this.blockController.blockToEmbed()]})
 
                     // All the transactions on the block that was just solved
@@ -126,14 +158,17 @@ export default class MainController{
                             break;
                         }
                     });
-                    this.blockController.createNewBlock(this.guessChannel);
+                    let captcha = new DiscordCaptcha()
+                    console.log('new solution: ', captcha.value());
+                    this.blockController.createNewBlock(this.guessChannel, captcha);
 
                 }//if
+                this.blockController.ocupied = false;
             }//if
         })
     }
 
-    async fetchBlocksFromChannel(): Promise<Message[]> {
+    async fetchBlocksFromChain(): Promise<Message[]> {
         let blocks: Message[] = [];
         let lastID;
         while(true){
@@ -143,7 +178,6 @@ export default class MainController{
             });;
 
             if (fetchedBlocks.size === 0) {
-                console.log(JSON.stringify(fetchedBlocks));
                 return blocks.reverse();
             }
             console.log(`Adding ${fetchedBlocks.size} Blocks`);
@@ -152,7 +186,7 @@ export default class MainController{
         }
     }
 
-    static async parseBlocksToTransactions(blocks: Message[]): Promise<Transaction[]> {
+    static parseBlocksToTransactions(blocks: Message[]): Transaction[] {
         let transactions: Transaction[] = [];
         blocks.forEach(block => {
             let blockTransactions = block.embeds[0].fields;

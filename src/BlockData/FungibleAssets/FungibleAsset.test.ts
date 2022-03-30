@@ -1,7 +1,7 @@
 import Medium from '../Medium';
-import FungibleAsset from './FungibleAsset';
-import Stock from './Stock';
-import Token from './Token';
+import { FungibleAsset } from './FungibleAsset';
+import { Stock } from './Stock';
+import { Token } from './Token';
 
 jest.mock("../Medium");
 

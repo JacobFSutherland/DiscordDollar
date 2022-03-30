@@ -1,6 +1,6 @@
-import AssetController from "./AssetController";
+import { AssetController} from "./AssetController";
 import EconomyParticipant from "../../BlockData/EconomyParticipant";
-import FungibleAsset from "../../BlockData/FungibleAssets/FungibleAsset";
+import { FungibleAsset } from "../../BlockData/FungibleAssets/FungibleAsset";
 import NFT from "../../BlockData/NonFungibleAssets/NFT";
 import NonFungibleAsset from "../../BlockData/NonFungibleAssets/NonFungibleAsset";
 

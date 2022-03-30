@@ -3,7 +3,7 @@ import { Transaction } from "../Transaction";
 import { MessageEmbed } from "discord.js"
 
 
-export default class Block {
+export class Block {
 
     transactions: Transaction[];
     startTime: number;

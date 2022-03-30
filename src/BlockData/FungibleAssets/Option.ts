@@ -1,7 +1,7 @@
 import assert from "assert";
-import FungibleAsset from "./FungibleAsset";
+import { FungibleAsset } from "./FungibleAsset";
 
-export default class Option extends FungibleAsset {
+export class Option extends FungibleAsset {
     ticker: string;
     strike: number;
     option: 'Calls' | 'Puts';

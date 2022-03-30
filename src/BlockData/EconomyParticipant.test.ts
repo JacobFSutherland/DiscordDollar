@@ -1,7 +1,7 @@
 import EconomyParticipant from "./EconomyParticipant";
-import Token from "./FungibleAssets/Token";
-import FungibleAsset from "./FungibleAssets/FungibleAsset";
-import Stock from "./FungibleAssets/Stock";
+import { Token } from "./FungibleAssets/Token";
+import { FungibleAsset } from "./FungibleAssets/FungibleAsset";
+import { Stock } from "./FungibleAssets/Stock";
 import NFT from "./NonFungibleAssets/NFT";
 
 describe('Test Economy Participant Static Values', () => {

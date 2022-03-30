@@ -1,6 +1,6 @@
 import TSMap from "./TSMap";
 import assert from "assert";
-import FungibleAsset from "./FungibleAssets/FungibleAsset";
+import { FungibleAsset } from "./FungibleAssets/FungibleAsset";
 import NonFungibleAsset from "./NonFungibleAssets/NonFungibleAsset";
 
 export default class EconomyParticipant{

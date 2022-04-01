@@ -1,6 +1,6 @@
-import NonFungibleAsset from "./NonFungibleAsset";
+import { NonFungibleAsset } from "./";
 
-export default class NFT extends NonFungibleAsset{
+export class NFT extends NonFungibleAsset{
 
     constructor(){
         super('NFT');

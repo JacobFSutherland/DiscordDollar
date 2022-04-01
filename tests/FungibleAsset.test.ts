@@ -1,9 +1,9 @@
-import Medium from '../Medium';
-import { FungibleAsset } from './FungibleAsset';
-import { Stock } from './Stock';
-import { Token } from './Token';
+import { Stock, Token } from "../src";
+import Medium from "../src/BlockData/Medium";
+import { FungibleAsset } from '../src/BlockData/FungibleAssets'
 
-jest.mock("../Medium");
+
+jest.mock("../src/BlockData/FungibleAssets");
 
 describe('Test Token Constructor', () => {
 

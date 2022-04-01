@@ -1,7 +1,5 @@
-import { FungibleAsset } from "../../BlockData/FungibleAssets/FungibleAsset";
-import EconomyParticipant from "../../BlockData/EconomyParticipant";
-import TSMap from "../../BlockData/TSMap";
-import NonFungibleAsset from "../../BlockData/NonFungibleAssets/NonFungibleAsset";
+import { TSMap, EconomyParticipant, FungibleAsset, NonFungibleAsset } from "../../BlockData";
+
 
 
 export class AssetController{

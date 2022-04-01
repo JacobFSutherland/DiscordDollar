@@ -1,7 +1,7 @@
 import { Router, Request, Response, json } from "express";
 import { Transaction } from "../../../BlockData";
 import { FungibleAsset } from "../../../BlockData/FungibleAssets/FungibleAsset";
-import NonFungibleAsset from "../../../BlockData/NonFungibleAssets/NonFungibleAsset";
+import { NonFungibleAsset } from "../../../BlockData/NonFungibleAssets/NonFungibleAsset";
 import { AssetController } from "../AssetController";
 import { BlockController} from "../BlockController";
 

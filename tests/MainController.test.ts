@@ -1,19 +1,8 @@
-import { MainController } from "./MainController";
-import { AssetController } from './AssetController'
-import { Client, Intents, TextChannel, Message } from 'discord.js';
-import {Token} from "../../BlockData/FungibleAssets/Token";
-import {Stock} from "../../BlockData/FungibleAssets/Stock";
-import {Option} from "../../BlockData/FungibleAssets/Option";
-import NFT from "../../BlockData/NonFungibleAssets/NFT";
-import Quote from "../../BlockData/NonFungibleAssets/Quotes";
-import { Transaction } from "../../BlockData";
-import env from '../../../env';
-import EconomyParticipant from "../../BlockData/EconomyParticipant";
-import {FungibleAsset} from "../../BlockData/FungibleAssets/FungibleAsset";
-import NonFungibleAsset from "../../BlockData/NonFungibleAssets/NonFungibleAsset";
-import {BlockController} from "./BlockController";
-import {Block} from "../../BlockData/Block/Block";
-import { DiscordCaptcha } from "../../BlockData/Captcha/DiscordCaptcha";
+import { Client, Intents, TextChannel } from "discord.js";
+import env from '../env'
+import { AssetController, EconomyParticipant, FungibleAsset, NonFungibleAsset, MainController, Token, Stock, NFT, Transaction, DiscordCaptcha, Block, BlockController, Option, Quote } from "../src";
+
+
 
 jest.setTimeout(80000);
 

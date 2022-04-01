@@ -1,7 +1,7 @@
-import Medium from "../Medium";
-import NonFungibleAsset from "./NonFungibleAsset";
+import { NonFungibleAsset } from "./";
 
-export default class Quote extends NonFungibleAsset{
+
+export  class Quote extends NonFungibleAsset{
 
     constructor(){
         super('NFT');

@@ -1,6 +1,7 @@
 import assert from "assert";
 import Medium from "../Medium";
 
+
 export class FungibleAsset extends Medium {
 
     name: string;

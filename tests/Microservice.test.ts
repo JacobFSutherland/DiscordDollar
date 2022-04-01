@@ -1,5 +1,5 @@
-import { Token, Transaction } from "../../BlockData";
-import { Microservice } from "./Microservice"
+import { Microservice, Token, Transaction } from "../src";
+
 
 describe('Test microservice endpoints', () => {
 

@@ -1,20 +1,13 @@
-import request from 'supertest';
-import addTransaction from './addTransaction';
-import { AssetController } from '../AssetController';
-import { BlockController} from '../BlockController';
-import Express from "express"
-import NonFungibleAsset from '../../../BlockData/NonFungibleAssets/NonFungibleAsset';
-import { Token } from '../../../BlockData/FungibleAssets/Token';
-import { Stock } from '../../../BlockData/FungibleAssets/Stock';
-import NFT from '../../../BlockData/NonFungibleAssets/NFT';
-import { Transaction } from '../../../BlockData';
-import { Block } from '../../../BlockData/Block/Block';
-import { DiscordCaptcha } from '../../../BlockData/Captcha/DiscordCaptcha';
+import request from "supertest";
+import { AssetController, BlockController, DiscordCaptcha, Token, Stock, Transaction, NFT } from "../src";
+import { Block } from "../src/BlockData/Block/Block";
+import addTransaction from "../src/Services/DiscordDollar/routes/addTransaction";
+import express, { Express } from 'express'
 
 let assetController = new AssetController();
 let blockController = new BlockController("Test Token", new Block(new DiscordCaptcha()));
-const app = Express()
-app.use(Express.json());
+const app = express()
+app.use(express.json());
 
 let token1 = "Example Token 1";
 let token2 = "Example Token 2";

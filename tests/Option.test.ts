@@ -1,4 +1,4 @@
-import { Option } from "./Option";
+import { Option } from "../src";
 
 describe('Test Constructor', () => {
 

@@ -1,3 +1,3 @@
-export default interface TSMap <T>{
+export interface TSMap <T>{
    [key: string]: T;
 }

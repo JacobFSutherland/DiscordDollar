@@ -1,7 +1,7 @@
 {
   "name": "discord-dollars",
   "version": "1.0.0",
-  "description": "��T\u0000y\u0000p\u0000e\u0000s\u0000 \u0000u\u0000s\u0000e\u0000d\u0000 \u0000i\u0000n\u0000 \u0000t\u0000h\u0000e\u0000 \u0000B\u0000o\u0000n\u0000k\u0000l\u0000e\u0000 \u0000B\u0000u\u0000c\u0000k\u0000 \u0000e\u0000c\u0000o\u0000s\u0000y\u0000s\u0000t\u0000e\u0000m\u0000\r\u0000 \u0000",
+  "description": "A Library to quickly simulate a virtual economy in Discord",
   "main": "index.js",
   "scripts": {
     "test": "jest --config jestconfig.json --coverage",
@@ -15,15 +15,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JacobFSutherland/BonkleBuckTypes.git"
+    "url": "git+https://github.com/JacobFSutherland/DiscordDollar.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/JacobFSutherland/BonkleBuckTypes/issues"
+    "url": "https://github.com/JacobFSutherland/DiscordDollar/issues"
   },
-  "homepage": "https://github.com/JacobFSutherland/BonkleBuckTypes#readme",
+  "homepage": "https://github.com/JacobFSutherland/DiscordDollar#readme",
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/jest": "^27.4.1",

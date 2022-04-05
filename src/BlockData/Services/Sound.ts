@@ -1,6 +1,6 @@
-import Service from "./Service";
+import { Service } from "./Service";
 
-export default class Sound extends Service{
+export class Sound extends Service{
     soundName: string;
     /**
      * 

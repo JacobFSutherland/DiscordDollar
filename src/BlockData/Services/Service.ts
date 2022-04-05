@@ -1,6 +1,7 @@
 import Medium from "../Medium";
 
-export default class Service extends Medium {
+
+export class Service extends Medium {
     /**
      * 
      * @param n Name of the service

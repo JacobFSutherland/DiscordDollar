@@ -1,6 +1,6 @@
-import Service from "./Service";
+import { Service } from "./Service";
 
-export default class DiscordInvite extends Service {
+export class DiscordInvite extends Service {
 
     constructor(){
         super('DiscordInvite');

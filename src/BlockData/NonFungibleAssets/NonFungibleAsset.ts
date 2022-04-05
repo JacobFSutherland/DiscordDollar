@@ -1,8 +1,7 @@
-import assert from "assert";
-import Medium from "../Medium";
 import {v4 as uuidv4} from 'uuid';
+import Medium from "../Medium";
 
-export default class NonFungibleAsset extends Medium {
+export class NonFungibleAsset extends Medium {
     id: string;
     constructor(s: string){
         super(s, 'NonFungibleAsset');

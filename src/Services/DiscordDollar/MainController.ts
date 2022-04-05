@@ -1,14 +1,10 @@
-import {AssetController} from "./AssetController";
-import {BlockController} from "./BlockController";
+import { Client, TextChannel, Intents, Message } from "discord.js";
 import express, { Express } from "express";
-import router from './routes';
-import { Client, Intents, TextChannel, Message } from 'discord.js';
-import {Block} from "../../BlockData/Block/Block";
-import { DiscordCaptcha } from "../../BlockData/Captcha/DiscordCaptcha";
-import { Transaction } from "../../BlockData";
-import {FungibleAsset} from "../../BlockData/FungibleAssets/FungibleAsset";
-import NonFungibleAsset from "../../BlockData/NonFungibleAssets/NonFungibleAsset";
-import { BlockGuess } from "../../BlockData/Block/BlockGuess";
+import { Block, DiscordCaptcha, Transaction, FungibleAsset, NonFungibleAsset, BlockGuess } from "../../BlockData";
+import { AssetController } from "./AssetController";
+import { BlockController } from "./BlockController";
+import router from './routes'
+
 
 
 export class MainController {

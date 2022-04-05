@@ -1,6 +1,6 @@
-import { FungibleAsset } from "./FungibleAssets/FungibleAsset";
-import NonFungibleAsset from "./NonFungibleAssets/NonFungibleAsset";
-import Service from "./Services/Service";
+import { FungibleAsset } from "./FungibleAssets";
+import { NonFungibleAsset } from "./NonFungibleAssets";
+import { Service } from "./Services";
 
 // Transaction class used for tracking transactions on the ledger
 export class Transaction {

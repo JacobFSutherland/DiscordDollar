@@ -1,9 +1,9 @@
-import TSMap from "./TSMap";
 import assert from "assert";
-import { FungibleAsset } from "./FungibleAssets/FungibleAsset";
-import NonFungibleAsset from "./NonFungibleAssets/NonFungibleAsset";
+import { FungibleAsset, NonFungibleAsset, TSMap } from "../../src";
 
-export default class EconomyParticipant{
+
+
+export class EconomyParticipant{
     static addedIDs: string[] = [];
     private static negativeBalAllowed: string[] = ['BLOCK_REWARD'];
     discordID: string;

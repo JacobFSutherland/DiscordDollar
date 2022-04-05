@@ -1,5 +1,5 @@
 import { Transaction } from '../../BlockData';
-import EconomyParticipant from '../../BlockData/EconomyParticipant';
+import { EconomyParticipant } from '../../BlockData/EconomyParticipant';
 import fetch from "node-fetch";
 
 export class Microservice{

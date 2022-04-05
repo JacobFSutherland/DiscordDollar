@@ -1,10 +1,7 @@
-import { AssetController} from "./AssetController";
-import EconomyParticipant from "../../BlockData/EconomyParticipant";
-import { FungibleAsset } from "../../BlockData/FungibleAssets/FungibleAsset";
-import NFT from "../../BlockData/NonFungibleAssets/NFT";
-import NonFungibleAsset from "../../BlockData/NonFungibleAssets/NonFungibleAsset";
+import { AssetController, EconomyParticipant, FungibleAsset, NFT, NonFungibleAsset } from "../src";
 
-jest.mock("../../BlockData/EconomyParticipant");
+
+jest.mock("../src/BlockData/EconomyParticipant");
 
 describe('Test Constructor', () => {
 
@@ -13,7 +10,7 @@ describe('Test Constructor', () => {
     beforeEach(() => EconomyParticipant.addedIDs = []);
 
     test("Test 1: Make sure a new economy participant is being created when an asset is sent to a new user", () => {
-        jest.mock("../../BlockData/EconomyParticipant");
+        jest.mock("../src/BlockData/EconomyParticipant");
         let asset = new FungibleAsset('test asset', 10, "Asset");
         let asset2 = new FungibleAsset('test asset 2', 1, "Asset");
         a.addAsset("new user", asset);

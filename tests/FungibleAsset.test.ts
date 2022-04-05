@@ -1,9 +1,5 @@
-import { Stock, Token } from "../src";
-import Medium from "../src/BlockData/Medium";
-import { FungibleAsset } from '../src/BlockData/FungibleAssets'
+import { Stock, Token, FungibleAsset } from "../src";
 
-
-jest.mock("../src/BlockData/FungibleAssets");
 
 describe('Test Token Constructor', () => {
 
@@ -14,7 +10,6 @@ describe('Test Token Constructor', () => {
         let t = new FungibleAsset("a", 10, 'Asset');
         expect(t.amount).toEqual(10);
         expect(t.name).toEqual("a");
-        expect(Medium).toBeCalledTimes(1);
     })
 
     /**
@@ -24,7 +19,7 @@ describe('Test Token Constructor', () => {
     test('Test 2: Create Invalid Asset', () => {
         expect(
             () => new FungibleAsset('b', -10, 'Asset')
-        ).toThrow('The Asset amount must be a positive value')
+        ).toThrow();
     })
 
 })
@@ -64,7 +59,7 @@ describe('Test Asset Functions', () => {
         t2 = new Stock("$b", 100);
 
         // Test initial add function
-        expect(() => t1.add(t2)).toThrow('The assets must be the same asset when performing an adition');
+        expect(() => t1.add(t2)).toThrow();
 
         // Test Post Conditions
         expect(t1.amount).toEqual(10);
@@ -107,7 +102,8 @@ describe('Test Asset Functions', () => {
     test('Test 5: Subtract 2 tokens together with different names', () => {
         t1 = new FungibleAsset("a", 10, 'Asset');
         t2 = new FungibleAsset("b", 100, 'Asset');
-
+        expect(t1.type).toEqual(t2.type);
+        expect(t1.name).not.toEqual(t2.name);
         expect(() => t2.remove(t1)).toThrow("The assets must be the same asset when performing a subtraction");
 
         // Test Post Conditions

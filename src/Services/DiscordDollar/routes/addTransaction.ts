@@ -24,6 +24,7 @@ export default (assets: AssetController, block: BlockController): Router => {
             }
             //Add transaction to block
             block.addTransaction(body);
+            res.setHeader('content-type', 'application/json');
             res.status(200).send(JSON.stringify({status: 'success'}));
         }catch(e: any) {   
             // We know if we catch an error, it was likely going to be an illegal transaction, IE: overspending

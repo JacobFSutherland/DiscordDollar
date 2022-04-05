@@ -24,7 +24,7 @@ export class FungibleAsset extends Medium {
      * @param asset The asset being added
      */
     add(asset: FungibleAsset) {
-        assert(asset.type === this.type, 'The assets must be the same type when performing an adition')
+        assert(asset.type === this.type, 'The assets must be the same type when performing an adition');
         assert(asset.name === this.name, 'The assets must be the same asset when performing an adition'); // Check to make sure they are the same token
         this.amount += asset.amount;
         asset.amount = 0;

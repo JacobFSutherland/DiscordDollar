@@ -1,6 +1,6 @@
-import Service from "./Service";
+import { Service } from "./Service";
 
-export default class Mute extends Service{
+export class Mute extends Service{
     duration: number;
 
     constructor(){

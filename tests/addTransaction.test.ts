@@ -1,20 +1,13 @@
-import request from 'supertest';
-import addTransaction from './addTransaction';
-import { AssetController } from '../AssetController';
-import { BlockController} from '../BlockController';
-import Express from "express"
-import NonFungibleAsset from '../../../BlockData/NonFungibleAssets/NonFungibleAsset';
-import { Token } from '../../../BlockData/FungibleAssets/Token';
-import { Stock } from '../../../BlockData/FungibleAssets/Stock';
-import NFT from '../../../BlockData/NonFungibleAssets/NFT';
-import { Transaction } from '../../../BlockData';
-import { Block } from '../../../BlockData/Block/Block';
-import { DiscordCaptcha } from '../../../BlockData/Captcha/DiscordCaptcha';
+import request from "supertest";
+import { AssetController, BlockController, DiscordCaptcha, Token, Stock, Transaction, NFT } from "../src";
+import { Block } from "../src/BlockData/Block/Block";
+import transactionRouter from "../src/Services/DiscordDollar/routes";
+import express, { Express } from 'express'
 
 let assetController = new AssetController();
 let blockController = new BlockController("Test Token", new Block(new DiscordCaptcha()));
-const app = Express()
-app.use(Express.json());
+const app = express()
+app.use(express.json());
 
 let token1 = "Example Token 1";
 let token2 = "Example Token 2";
@@ -43,7 +36,7 @@ let s1 = new Stock("$BB", 10);
 let s2 = new Stock("$GME", 2);
 let s3 = new Stock("$FRT", 5);
 
-app.use('/', addTransaction(assetController, blockController));
+app.use('/', transactionRouter(assetController, blockController));
 
 describe ("POST /AddTransaction", () => {
 
@@ -71,7 +64,7 @@ describe ("POST /AddTransaction", () => {
             // Transaction of user 2 sending more Token 1 than they have to user 1
 
             let T = new Transaction(user1, new Token(token1, 20), user2);
-            let res = await request(app).post('/').send(T)
+            let res = await request(app).post('/addTransaction').send(T)
             expect(assetController.userAssets[user1].fungibleAssets[token1].amount).toBe(t1.amount);
             expect(assetController.userAssets[user2].fungibleAssets[token1].amount).toBe(t2.amount);
             expect(res.headers['content-type']).toContain('json');
@@ -84,7 +77,7 @@ describe ("POST /AddTransaction", () => {
             // Transaction of user 2 sending a token they do not have to user 1
 
             let T = new Transaction(user1, new Token("Non-existant Token", 20), user2);
-            const res = await request(app).post('/').send(T)
+            const res = await request(app).post('/addTransaction').send(T)
             expect(res.headers['content-type']).toContain('json');
             expect(assetController.userAssets[user1].fungibleAssets["Non-Existant Token"]).toBeUndefined()
             expect(assetController.userAssets[user2].fungibleAssets["Non-Existant Token"]).toBeUndefined()
@@ -97,7 +90,7 @@ describe ("POST /AddTransaction", () => {
             // Transaction of user 2 sending a token they do not have to user 1
 
             let T = new Transaction(user1, NFA3, user2);
-            const res = await request(app).post('/').send(T)
+            const res = await request(app).post('/addTransaction').send(T)
             expect(res.headers['content-type']).toContain('json');
             expect(assetController.userAssets[user1].nonFungibleAssets[NFA3.id]).toBeUndefined()
             expect(assetController.userAssets[user2].nonFungibleAssets[NFA3.id]).toBeUndefined()
@@ -109,7 +102,8 @@ describe ("POST /AddTransaction", () => {
             // Transaction of user 2 sending a token they do not have to user 1
 
             let T = new Transaction(user1, t1, user4);
-            let res = await request(app).post('/').send(T)
+            let res = await request(app).post('/addTransaction').send(T)
+            expect(res.headers['content-type']).toContain('json');
             expect(res.statusCode).toBe(400);
             expect(assetController.userAssets[user4].fungibleAssets[token1]).toBeUndefined()
             expect(assetController.userAssets[user2].fungibleAssets[token1].amount).toBe(t2.amount)
@@ -124,7 +118,7 @@ describe ("POST /AddTransaction", () => {
             // Transaction of user 1 sending Token 1 to user 1
 
             let T = new Transaction(user2, new Token(token1, 2), user1);
-            let res = await request(app).post('/').send(T)
+            let res = await request(app).post('/addTransaction').send(T)
             expect(res.headers['content-type']).toContain('json');
             expect(res.statusCode).toBe(200);
             expect(assetController.userAssets[user1].fungibleAssets[token1].amount).toBe(t1.amount - 2);
